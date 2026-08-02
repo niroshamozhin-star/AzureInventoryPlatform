@@ -14,10 +14,11 @@ supports.
 The app models a small inventory operation: products live in warehouses, stock
 levels are tracked per product/warehouse pair, and reports surface stock summaries
 and low-stock alerts. It starts simple (Phase 1: in-memory data, hosted on Azure
-App Service) and incrementally adopts Azure SQL, Blob Storage, Functions, Service
-Bus, Cosmos DB, Key Vault, Managed Identity, Application Insights, Azure Monitor,
-Docker, Container Registry, and GitHub Actions CI/CD — one phase, one Azure
-service, at a time. See [Learning Journey](#learning-journey) for what's done so far.
+App Service) and incrementally adopts Azure SQL, JWT Authentication, Blob
+Storage, Functions, Service Bus, Cosmos DB, Key Vault, Managed Identity,
+Application Insights, Azure Monitor, Docker, Container Registry, and GitHub
+Actions CI/CD — one phase, one Azure service, at a time. See
+[Learning Journey](#learning-journey) for what's done so far.
 
 ## Features
 
@@ -36,17 +37,18 @@ service, at a time. See [Learning Journey](#learning-journey) for what's done so
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Linux, F1 Free tier) |
 | Azure SQL | ⬜ Phase 2 | Relational persistence via EF Core, replacing the in-memory store |
-| Blob Storage | ⬜ Phase 3 | Product images, exported report files |
-| Azure Functions | ⬜ Phase 4 | HTTP, Blob-triggered, and Timer-triggered background work |
-| Service Bus | ⬜ Phase 5 | Async inventory-changed events |
-| Cosmos DB | ⬜ Phase 6 | Denormalized store for the Reports module |
-| Key Vault | ⬜ Phase 7 | Secrets/connection strings out of config files |
-| Managed Identity | ⬜ Phase 8 | Passwordless auth from App Service to the above |
-| Application Insights | ⬜ Phase 9 | Telemetry, custom events/metrics |
-| Azure Monitor | ⬜ Phase 10 | Alert rules and dashboards |
-| Docker | ⬜ Phase 11 | Containerize the app |
-| Azure Container Registry | ⬜ Phase 12 | Host the container image |
-| GitHub Actions | ⬜ Phase 13 | CI/CD straight from this repo |
+| JWT Authentication | ⬜ Phase 3 | Secures the app's endpoints with JWT bearer tokens |
+| Blob Storage | ⬜ Phase 4 | Product images, exported report files |
+| Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
+| Service Bus | ⬜ Phase 6 | Async inventory-changed events |
+| Cosmos DB | ⬜ Phase 7 | Denormalized store for the Reports module |
+| Key Vault | ⬜ Phase 8 | Secrets/connection strings out of config files |
+| Managed Identity | ⬜ Phase 9 | Passwordless auth from App Service to the above |
+| Application Insights | ⬜ Phase 10 | Telemetry, custom events/metrics |
+| Azure Monitor | ⬜ Phase 11 | Alert rules and dashboards |
+| Docker | ⬜ Phase 12 | Containerize the app |
+| Azure Container Registry | ⬜ Phase 13 | Host the container image |
+| GitHub Actions | ⬜ Phase 14 | CI/CD straight from this repo |
 
 ## Architecture Diagram
 
@@ -96,17 +98,18 @@ feature of the app rather than an isolated demo:
 |---|-------|--------|------|
 | 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
 | 2 | Azure SQL | ⬜ Not started | |
-| 3 | Blob Storage | ⬜ Not started | |
-| 4 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
-| 5 | Service Bus | ⬜ Not started | |
-| 6 | Cosmos DB | ⬜ Not started | |
-| 7 | Key Vault | ⬜ Not started | |
-| 8 | Managed Identity | ⬜ Not started | |
-| 9 | Application Insights | ⬜ Not started | |
-| 10 | Azure Monitor | ⬜ Not started | |
-| 11 | Docker | ⬜ Not started | |
-| 12 | Azure Container Registry | ⬜ Not started | |
-| 13 | CI/CD (GitHub Actions) | ⬜ Not started | |
+| 3 | JWT Authentication | ⬜ Not started | |
+| 4 | Blob Storage | ⬜ Not started | |
+| 5 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
+| 6 | Service Bus | ⬜ Not started | |
+| 7 | Cosmos DB | ⬜ Not started | |
+| 8 | Key Vault | ⬜ Not started | |
+| 9 | Managed Identity | ⬜ Not started | |
+| 10 | Application Insights | ⬜ Not started | |
+| 11 | Azure Monitor | ⬜ Not started | |
+| 12 | Docker | ⬜ Not started | |
+| 13 | Azure Container Registry | ⬜ Not started | |
+| 14 | CI/CD (GitHub Actions) | ⬜ Not started | |
 
 Each phase gets its own write-up in `docs/learning-notes/` covering: business scenario, the
 Azure resource created, the code change, Azure Portal configuration steps,
@@ -116,10 +119,9 @@ deployment, and how it was tested.
 
 Tracked as the remaining AZ-204 phases (see the [Azure services table](#azure-services-used)
 above), plus:
-- Authentication/authorization (Azure AD / Entra ID) once a real user model exists
 - Pagination and search on the Products/Inventory list pages
-- Exporting reports to Blob Storage as CSV/PDF (natural fit once Phase 3 lands)
-- A CI pipeline that runs `dotnet test` on every PR, ahead of the full CD story in Phase 13
+- Exporting reports to Blob Storage as CSV/PDF (natural fit once Phase 4 lands)
+- A CI pipeline that runs `dotnet test` on every PR, ahead of the full CD story in Phase 14
 
 ## How to run locally
 
@@ -149,7 +151,7 @@ Visual Studio publish profiles (`*.pubxml`, `Properties/ServiceDependencies/`),
 and common secret file patterns. As later phases introduce real Azure connection
 strings, they'll be sourced from
 [User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets) or
-environment variables locally, and **Managed Identity** (Phase 8) in Azure —
+environment variables locally, and **Managed Identity** (Phase 9) in Azure —
 never hardcoded in source.
 
 ## Cost philosophy
@@ -157,7 +159,7 @@ never hardcoded in source.
 This is a personal learning/portfolio project — every phase defaults to the
 **free or cheapest tier** of each Azure service (App Service F1 Free, Azure SQL
 serverless free offer, Cosmos DB free tier, Functions Consumption plan, Service Bus
-Basic, etc.). The one paid exception is **Azure Container Registry** (Phase 12,
+Basic, etc.). The one paid exception is **Azure Container Registry** (Phase 13,
 Basic tier ≈ $0.17/day) — there's no free ACR tier. Each phase's doc calls out the
 tier used and its cost.
 
