@@ -1,25 +1,23 @@
-using AzureInventoryPlatform.Web.ApiClients;
+using AzureInventoryPlatform.Web;
+using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHealthChecks();
 
-var apiBaseUrl = builder.Configuration["ApiBaseUrl"]
-    ?? throw new InvalidOperationException("ApiBaseUrl is not configured.");
-
-builder.Services.AddHttpClient<IProductApiClient, ProductApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddHttpClient<IWarehouseApiClient, WarehouseApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddHttpClient<IInventoryApiClient, InventoryApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddHttpClient<IReportApiClient, ReportApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
+// In-memory for Phase 1. Phase 2 swaps these for EF Core/Azure SQL-backed
+// implementations of the same IRepository<T> contract without touching controllers.
+builder.Services.AddSingleton<IRepository<Product>, InMemoryRepository<Product>>();
+builder.Services.AddSingleton<IRepository<Warehouse>, InMemoryRepository<Warehouse>>();
+builder.Services.AddSingleton<IRepository<InventoryItem>, InMemoryRepository<InventoryItem>>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -27,11 +25,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapHealthChecks("/health");
+
+await SeedData.SeedAsync(app.Services);
 
 app.Run();
+
+// Exposed for WebApplicationFactory-based integration tests.
+public partial class Program { }

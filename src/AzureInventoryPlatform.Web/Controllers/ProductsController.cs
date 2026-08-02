@@ -1,14 +1,14 @@
-using AzureInventoryPlatform.Contracts.Models;
-using AzureInventoryPlatform.Web.ApiClients;
+using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
 public class ProductsController : Controller
 {
-    private readonly IProductApiClient _products;
+    private readonly IRepository<Product> _products;
 
-    public ProductsController(IProductApiClient products)
+    public ProductsController(IRepository<Product> products)
     {
         _products = products;
     }
@@ -26,7 +26,7 @@ public class ProductsController : Controller
             return View(product);
         }
 
-        await _products.CreateAsync(product);
+        await _products.AddAsync(product);
         TempData["Success"] = $"Product \"{product.Name}\" created.";
         return RedirectToAction(nameof(Index));
     }

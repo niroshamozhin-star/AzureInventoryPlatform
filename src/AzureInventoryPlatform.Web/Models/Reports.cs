@@ -1,4 +1,4 @@
-namespace AzureInventoryPlatform.Contracts.Models;
+namespace AzureInventoryPlatform.Web.Models;
 
 public record WarehouseStockSummary(int WarehouseId, string WarehouseName, int TotalUnits, decimal TotalValue);
 

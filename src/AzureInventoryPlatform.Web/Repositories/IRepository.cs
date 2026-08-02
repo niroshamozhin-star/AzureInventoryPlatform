@@ -1,6 +1,6 @@
-using AzureInventoryPlatform.Contracts.Models;
+using AzureInventoryPlatform.Web.Models;
 
-namespace AzureInventoryPlatform.Api.Repositories;
+namespace AzureInventoryPlatform.Web.Repositories;
 
 public interface IRepository<T> where T : IEntity
 {

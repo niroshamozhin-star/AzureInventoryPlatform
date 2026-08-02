@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AzureInventoryPlatform.Api\AzureInventoryPlatform.Api.csproj" />
+    <ProjectReference Include="..\..\src\AzureInventoryPlatform.Web\AzureInventoryPlatform.Web.csproj" />
   </ItemGroup>
 
 </Project>

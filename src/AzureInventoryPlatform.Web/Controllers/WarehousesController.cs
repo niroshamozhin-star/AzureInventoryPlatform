@@ -1,14 +1,14 @@
-using AzureInventoryPlatform.Contracts.Models;
-using AzureInventoryPlatform.Web.ApiClients;
+using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
 public class WarehousesController : Controller
 {
-    private readonly IWarehouseApiClient _warehouses;
+    private readonly IRepository<Warehouse> _warehouses;
 
-    public WarehousesController(IWarehouseApiClient warehouses)
+    public WarehousesController(IRepository<Warehouse> warehouses)
     {
         _warehouses = warehouses;
     }
@@ -26,7 +26,7 @@ public class WarehousesController : Controller
             return View(warehouse);
         }
 
-        await _warehouses.CreateAsync(warehouse);
+        await _warehouses.AddAsync(warehouse);
         TempData["Success"] = $"Warehouse \"{warehouse.Name}\" created.";
         return RedirectToAction(nameof(Index));
     }

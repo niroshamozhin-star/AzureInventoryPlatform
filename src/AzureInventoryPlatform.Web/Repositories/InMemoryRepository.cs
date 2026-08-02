@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using AzureInventoryPlatform.Contracts.Models;
+using AzureInventoryPlatform.Web.Models;
 
-namespace AzureInventoryPlatform.Api.Repositories;
+namespace AzureInventoryPlatform.Web.Repositories;
 
 /// <summary>
 /// Thread-safe in-memory store. Placeholder for Phase 2 (Azure SQL/EF Core) and

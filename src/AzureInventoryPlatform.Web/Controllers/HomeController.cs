@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using AzureInventoryPlatform.Web.ApiClients;
 using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 using AzureInventoryPlatform.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,21 +8,18 @@ namespace AzureInventoryPlatform.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IProductApiClient _products;
-    private readonly IWarehouseApiClient _warehouses;
-    private readonly IInventoryApiClient _inventory;
-    private readonly IReportApiClient _reports;
+    private readonly IRepository<Product> _products;
+    private readonly IRepository<Warehouse> _warehouses;
+    private readonly IRepository<InventoryItem> _inventory;
 
     public HomeController(
-        IProductApiClient products,
-        IWarehouseApiClient warehouses,
-        IInventoryApiClient inventory,
-        IReportApiClient reports)
+        IRepository<Product> products,
+        IRepository<Warehouse> warehouses,
+        IRepository<InventoryItem> inventory)
     {
         _products = products;
         _warehouses = warehouses;
         _inventory = inventory;
-        _reports = reports;
     }
 
     public async Task<IActionResult> Index()
@@ -30,9 +27,9 @@ public class HomeController : Controller
         var products = await _products.GetAllAsync();
         var warehouses = await _warehouses.GetAllAsync();
         var inventory = await _inventory.GetAllAsync();
-        var lowStock = await _reports.GetLowStockAsync();
+        var lowStockCount = inventory.Count(i => i.QuantityOnHand <= i.ReorderLevel);
 
-        var viewModel = new DashboardViewModel(products.Count, warehouses.Count, inventory.Count, lowStock.Count);
+        var viewModel = new DashboardViewModel(products.Count, warehouses.Count, inventory.Count, lowStockCount);
         return View(viewModel);
     }
 

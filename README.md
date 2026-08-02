@@ -1,8 +1,9 @@
 # Azure Inventory Management & Reporting Platform
 
-A learning project that builds one ASP.NET Core 8 Web API up incrementally, adding a
+A learning project that builds one ASP.NET Core 8 MVC app up incrementally, adding a
 single Azure service at a time, to cover the **AZ-204: Developing Solutions for
-Microsoft Azure** exam objectives hands-on.
+Microsoft Azure** exam objectives hands-on. The app calls Azure SDKs directly from
+its controllers/services as each phase adds a new one — no separate Web API layer.
 
 Business domain: a simple inventory system with four modules — **Products**,
 **Warehouses**, **Inventory** (stock levels per product/warehouse), and **Reports**
@@ -35,43 +36,40 @@ deployment, and how it was tested.
 ```
 AzureInventoryPlatform.sln
 src/
-  AzureInventoryPlatform.Contracts/  Plain class library: Product/Warehouse/InventoryItem/
-                                      report models shared by Api and Web (no ASP.NET Core
-                                      framework reference — see note below)
-  AzureInventoryPlatform.Api/         ASP.NET Core 8 Web API (Product/Warehouse/Inventory/Reports)
-  AzureInventoryPlatform.Web/         ASP.NET Core 8 MVC UI, consumes the Web API over HTTP
+  AzureInventoryPlatform.Web/    ASP.NET Core 8 MVC app — Products/Warehouses/
+                                 Inventory/Reports, Bootstrap UI, calls Azure SDKs
+                                 directly as each phase adds one
 tests/
-  AzureInventoryPlatform.Api.Tests/   xUnit + WebApplicationFactory integration tests
+  AzureInventoryPlatform.Web.Tests/   xUnit + WebApplicationFactory integration tests
 docs/
   phase-01-app-service.md, phase-02-azure-sql.md, ...
 ```
 
-The MVC UI (`AzureInventoryPlatform.Web`) isn't part of the AZ-204 phase sequence —
-it's a simple Bootstrap front end (dashboard + CRUD for Products/Warehouses/Inventory,
-a Reports page) that talks to the API via a typed `HttpClient` per module
-(`ApiClients/`), so there's something to click through instead of only curling
-JSON. Its `ApiBaseUrl` setting (`appsettings.json`) points at the API — update it
-once the API has a real Azure URL instead of localhost.
+Everything lives in one project on purpose. An earlier version of this repo split
+the API and UI into separate projects (`Api` + `Web` + a `Contracts` library just to
+share model classes between them) — pure ceremony that didn't serve the AZ-204
+learning goal and actually caused a real bug (ASP.NET Core's controller discovery
+scans every referenced assembly that touches `Microsoft.AspNetCore.Mvc`, so the Web
+project ended up "discovering" the API's own controllers and crashing trying to run
+them without the API's DI registrations). One MVC app, calling Azure SDKs directly
+from its controllers, sidesteps that entirely and is simpler to reason about.
 
-**Why a separate `Contracts` project exists:** Web originally referenced Api directly
-to reuse its model classes. That broke at runtime — ASP.NET Core's controller
-discovery scans every referenced assembly that touches `Microsoft.AspNetCore.Mvc`,
-so Web ended up "discovering" Api's own controllers and trying to run them with
-Web's dependency injection container (which never registered `IRepository<T>`),
-crashing with `Unable to resolve service for type IRepository<Warehouse>`. Moving
-the shared models into a plain class library with no ASP.NET Core dependency
-(`Contracts`) and having both `Api` and `Web` reference *that* instead fixes it —
-`Contracts.dll` isn't a controller-discovery candidate, so nothing leaks across.
+Inside `AzureInventoryPlatform.Web`:
+- `Models/` — `Product`, `Warehouse`, `InventoryItem`, plus `WarehouseStockSummary`/
+  `LowStockAlert` for reports.
+- `Repositories/` — `IRepository<T>` + an in-memory implementation. Controllers
+  depend on the interface, so Phase 2 (Azure SQL/EF Core) and Phase 6 (Cosmos DB,
+  for reports) swap in a different implementation without touching controllers or
+  views.
+- `Controllers/` + `Views/` — standard MVC, Bootstrap-styled, light theme.
 
 ## Running locally
 
-Run the API first, then the Web UI in a second terminal (the UI's `ApiBaseUrl`
-defaults to `http://localhost:5080`):
-
 ```bash
-dotnet run --project src/AzureInventoryPlatform.Api   # http://localhost:5080/swagger
-dotnet run --project src/AzureInventoryPlatform.Web    # http://localhost:5104
+dotnet run --project src/AzureInventoryPlatform.Web
 ```
+
+Open `http://localhost:5104`.
 
 ## Running tests
 

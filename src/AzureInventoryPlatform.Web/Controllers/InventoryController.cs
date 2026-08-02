@@ -1,5 +1,5 @@
-using AzureInventoryPlatform.Contracts.Models;
-using AzureInventoryPlatform.Web.ApiClients;
+using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 using AzureInventoryPlatform.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,14 +8,14 @@ namespace AzureInventoryPlatform.Web.Controllers;
 
 public class InventoryController : Controller
 {
-    private readonly IInventoryApiClient _inventory;
-    private readonly IProductApiClient _products;
-    private readonly IWarehouseApiClient _warehouses;
+    private readonly IRepository<InventoryItem> _inventory;
+    private readonly IRepository<Product> _products;
+    private readonly IRepository<Warehouse> _warehouses;
 
     public InventoryController(
-        IInventoryApiClient inventory,
-        IProductApiClient products,
-        IWarehouseApiClient warehouses)
+        IRepository<InventoryItem> inventory,
+        IRepository<Product> products,
+        IRepository<Warehouse> warehouses)
     {
         _inventory = inventory;
         _products = products;
@@ -54,20 +54,23 @@ public class InventoryController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(InventoryItem item)
     {
+        if (await _products.GetByIdAsync(item.ProductId) is null)
+        {
+            ModelState.AddModelError(string.Empty, $"Product {item.ProductId} does not exist.");
+        }
+
+        if (await _warehouses.GetByIdAsync(item.WarehouseId) is null)
+        {
+            ModelState.AddModelError(string.Empty, $"Warehouse {item.WarehouseId} does not exist.");
+        }
+
         if (!ModelState.IsValid)
         {
             await PopulateDropdownsAsync();
             return View(item);
         }
 
-        var (success, error) = await _inventory.CreateAsync(item);
-        if (!success)
-        {
-            ModelState.AddModelError(string.Empty, error ?? "Could not create inventory item.");
-            await PopulateDropdownsAsync();
-            return View(item);
-        }
-
+        await _inventory.AddAsync(item);
         TempData["Success"] = "Inventory item created.";
         return RedirectToAction(nameof(Index));
     }
@@ -91,13 +94,21 @@ public class InventoryController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Adjust(int id, int delta)
     {
-        var (success, error) = await _inventory.AdjustAsync(id, delta);
-        if (!success)
+        var item = await _inventory.GetByIdAsync(id);
+        if (item is null)
         {
-            TempData["Error"] = error ?? "Could not adjust quantity.";
+            return NotFound();
+        }
+
+        var newQuantity = item.QuantityOnHand + delta;
+        if (newQuantity < 0)
+        {
+            TempData["Error"] = "Adjustment would result in negative quantity on hand.";
         }
         else
         {
+            item.QuantityOnHand = newQuantity;
+            await _inventory.UpdateAsync(item);
             TempData["Success"] = "Quantity adjusted.";
         }
 

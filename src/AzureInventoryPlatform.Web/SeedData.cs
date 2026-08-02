@@ -1,7 +1,7 @@
-using AzureInventoryPlatform.Contracts.Models;
-using AzureInventoryPlatform.Api.Repositories;
+using AzureInventoryPlatform.Web.Models;
+using AzureInventoryPlatform.Web.Repositories;
 
-namespace AzureInventoryPlatform.Api;
+namespace AzureInventoryPlatform.Web;
 
 public static class SeedData
 {
