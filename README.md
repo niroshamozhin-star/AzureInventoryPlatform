@@ -48,7 +48,7 @@ service, at a time. See [Progress](#progress) for what's done so far.
 
 ## Architecture
 
-![Architecture diagram](docs/architecture.png)
+![Architecture diagram](docs/architecture/architecture.png)
 
 A single ASP.NET Core MVC app — no separate Web API layer. Controllers call
 Azure SDKs (or, for now, an in-memory store) directly through an `IRepository<T>`
@@ -118,7 +118,7 @@ above), plus:
 
 | # | Phase | Status | Docs |
 |---|-------|--------|------|
-| 1 | App Service | ✅ Done | [docs/phase-01-app-service.md](docs/phase-01-app-service.md) |
+| 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
 | 2 | Azure SQL | ⬜ Not started | |
 | 3 | Blob Storage | ⬜ Not started | |
 | 4 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
@@ -132,7 +132,7 @@ above), plus:
 | 12 | Azure Container Registry | ⬜ Not started | |
 | 13 | CI/CD (GitHub Actions) | ⬜ Not started | |
 
-Each phase gets its own write-up in `docs/` covering: business scenario, the
+Each phase gets its own write-up in `docs/learning-notes/` covering: business scenario, the
 Azure resource created, the code change, Azure Portal configuration steps,
 deployment, and how it was tested.
 
@@ -155,3 +155,7 @@ serverless free offer, Cosmos DB free tier, Functions Consumption plan, Service 
 Basic, etc.). The one paid exception is **Azure Container Registry** (Phase 12,
 Basic tier ≈ $0.17/day) — there's no free ACR tier. Each phase's doc calls out the
 tier used and its cost.
+
+## License
+
+[MIT](LICENSE)
