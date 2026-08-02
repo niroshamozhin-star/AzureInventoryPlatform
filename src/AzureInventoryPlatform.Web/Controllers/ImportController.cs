@@ -32,10 +32,10 @@ public class ImportController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // ProductCode/WarehouseCode only exist in the spreadsheets - the database
-        // tables have no code column - so the mapping to real Ids only needs to
-        // live in memory for the life of this one import request.
-        var productCodeToReorderLevel = new Dictionary<string, int>();
+        // ProductCode/WarehouseCode are real, unique columns on the live tables, but
+        // Inventory.xlsx only carries the code, not the identity value the database
+        // assigns on insert - so the code -> Id mapping still needs to live in memory
+        // for the life of this one import request.
         var productCodeToId = new Dictionary<string, int>();
         var warehouseCodeToId = new Dictionary<string, int>();
 
@@ -45,12 +45,12 @@ public class ImportController : Controller
             var code = row[1];
             var product = await _products.AddAsync(new Product
             {
-                Sku = code,
-                Name = row[2],
+                ProductCode = code,
+                ProductName = row[2],
                 UnitPrice = decimal.Parse(row[3], CultureInfo.InvariantCulture),
+                ReorderLevel = int.Parse(row[4], CultureInfo.InvariantCulture),
             });
             productCodeToId[code] = product.Id;
-            productCodeToReorderLevel[code] = int.Parse(row[4], CultureInfo.InvariantCulture);
         }
 
         var warehouseRows = ReadRows(warehousesFile);
@@ -59,8 +59,9 @@ public class ImportController : Controller
             var code = row[1];
             var warehouse = await _warehouses.AddAsync(new Warehouse
             {
-                Name = row[2],
-                Location = row[3],
+                WarehouseCode = code,
+                WarehouseName = row[2],
+                City = row[3],
             });
             warehouseCodeToId[code] = warehouse.Id;
         }
@@ -83,8 +84,8 @@ public class ImportController : Controller
             {
                 ProductId = productId,
                 WarehouseId = warehouseId,
-                QuantityOnHand = int.Parse(row[3], CultureInfo.InvariantCulture),
-                ReorderLevel = productCodeToReorderLevel[productCode],
+                Quantity = int.Parse(row[3], CultureInfo.InvariantCulture),
+                LastUpdated = DateTime.Parse(row[4], CultureInfo.InvariantCulture),
             });
         }
 

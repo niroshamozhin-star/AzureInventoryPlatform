@@ -27,7 +27,7 @@ public class ProductsController : Controller
         }
 
         await _products.AddAsync(product);
-        TempData["Success"] = $"Product \"{product.Name}\" created.";
+        TempData["Success"] = $"Product \"{product.ProductName}\" created.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -52,7 +52,7 @@ public class ProductsController : Controller
         }
 
         await _products.UpdateAsync(product);
-        TempData["Success"] = $"Product \"{product.Name}\" updated.";
+        TempData["Success"] = $"Product \"{product.ProductName}\" updated.";
         return RedirectToAction(nameof(Index));
     }
 

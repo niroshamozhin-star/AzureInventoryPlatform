@@ -1,33 +1,32 @@
--- Azure Inventory Platform — Phase 2 schema
+-- Azure Inventory Platform - Phase 2 schema
 -- Run this once against your target database (LocalDB for local dev/tests,
 -- Azure SQL Database in the cloud) before starting the app.
 
-IF OBJECT_ID('dbo.InventoryItems', 'U') IS NULL
+IF OBJECT_ID('dbo.Inventory', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Products
     (
-        Id          INT IDENTITY(1,1) PRIMARY KEY,
-        Sku         NVARCHAR(30)  NOT NULL,
-        Name        NVARCHAR(200) NOT NULL,
-        Description NVARCHAR(MAX) NULL,
-        UnitPrice   DECIMAL(18,2) NOT NULL,
-        Category    NVARCHAR(100) NOT NULL
+        ProductId    INT IDENTITY(1,1) PRIMARY KEY,
+        ProductCode  NVARCHAR(20)  NOT NULL UNIQUE,
+        ProductName  NVARCHAR(200) NOT NULL,
+        UnitPrice    DECIMAL(18,2) NOT NULL,
+        ReorderLevel INT           NOT NULL
     );
 
     CREATE TABLE dbo.Warehouses
     (
-        Id       INT IDENTITY(1,1) PRIMARY KEY,
-        Name     NVARCHAR(200) NOT NULL,
-        Location NVARCHAR(200) NOT NULL,
-        Capacity INT           NOT NULL
+        WarehouseId   INT IDENTITY(1,1) PRIMARY KEY,
+        WarehouseCode NVARCHAR(20)  NOT NULL UNIQUE,
+        WarehouseName NVARCHAR(200) NOT NULL,
+        City          NVARCHAR(100) NOT NULL
     );
 
-    CREATE TABLE dbo.InventoryItems
+    CREATE TABLE dbo.Inventory
     (
-        Id             INT IDENTITY(1,1) PRIMARY KEY,
-        ProductId      INT NOT NULL REFERENCES dbo.Products(Id),
-        WarehouseId    INT NOT NULL REFERENCES dbo.Warehouses(Id),
-        QuantityOnHand INT NOT NULL,
-        ReorderLevel   INT NOT NULL
+        InventoryId  INT IDENTITY(1,1) PRIMARY KEY,
+        ProductId    INT      NOT NULL REFERENCES dbo.Products(ProductId),
+        WarehouseId  INT      NOT NULL REFERENCES dbo.Warehouses(WarehouseId),
+        Quantity     INT      NOT NULL,
+        LastUpdated  DATETIME NOT NULL
     );
 END

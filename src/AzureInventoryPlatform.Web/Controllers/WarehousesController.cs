@@ -27,7 +27,7 @@ public class WarehousesController : Controller
         }
 
         await _warehouses.AddAsync(warehouse);
-        TempData["Success"] = $"Warehouse \"{warehouse.Name}\" created.";
+        TempData["Success"] = $"Warehouse \"{warehouse.WarehouseName}\" created.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -52,7 +52,7 @@ public class WarehousesController : Controller
         }
 
         await _warehouses.UpdateAsync(warehouse);
-        TempData["Success"] = $"Warehouse \"{warehouse.Name}\" updated.";
+        TempData["Success"] = $"Warehouse \"{warehouse.WarehouseName}\" updated.";
         return RedirectToAction(nameof(Index));
     }
 

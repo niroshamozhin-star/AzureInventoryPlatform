@@ -31,23 +31,23 @@ public class ReportsController : Controller
             .GroupBy(i => i.WarehouseId)
             .Select(g => new WarehouseStockSummary(
                 g.Key,
-                warehouses[g.Key].Name,
-                g.Sum(i => i.QuantityOnHand),
-                g.Sum(i => i.QuantityOnHand * products[i.ProductId].UnitPrice)))
+                warehouses[g.Key].WarehouseName,
+                g.Sum(i => i.Quantity),
+                g.Sum(i => i.Quantity * products[i.ProductId].UnitPrice)))
             .OrderBy(s => s.WarehouseName)
             .ToList();
 
         var lowStock = relevantInventory
-            .Where(i => i.QuantityOnHand <= i.ReorderLevel)
+            .Where(i => i.Quantity <= products[i.ProductId].ReorderLevel)
             .Select(i => new LowStockAlert(
                 i.Id,
                 i.ProductId,
-                products[i.ProductId].Name,
+                products[i.ProductId].ProductName,
                 i.WarehouseId,
-                warehouses[i.WarehouseId].Name,
-                i.QuantityOnHand,
-                i.ReorderLevel))
-            .OrderBy(a => a.QuantityOnHand)
+                warehouses[i.WarehouseId].WarehouseName,
+                i.Quantity,
+                products[i.ProductId].ReorderLevel))
+            .OrderBy(a => a.Quantity)
             .ToList();
 
         ViewBag.LowStock = lowStock;

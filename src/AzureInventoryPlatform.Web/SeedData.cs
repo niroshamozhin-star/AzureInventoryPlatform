@@ -17,14 +17,16 @@ public static class SeedData
             return;
         }
 
-        var widget = await products.AddAsync(new Product { Sku = "WID-001", Name = "Widget", UnitPrice = 12.50m, Category = "Hardware" });
-        var gadget = await products.AddAsync(new Product { Sku = "GAD-002", Name = "Gadget", UnitPrice = 45.00m, Category = "Electronics" });
+        var widget = await products.AddAsync(new Product { ProductCode = "WID-001", ProductName = "Widget", UnitPrice = 12.50m, ReorderLevel = 100 });
+        var gadget = await products.AddAsync(new Product { ProductCode = "GAD-002", ProductName = "Gadget", UnitPrice = 45.00m, ReorderLevel = 25 });
 
-        var east = await warehouses.AddAsync(new Warehouse { Name = "East DC", Location = "Columbus, OH", Capacity = 10000 });
-        var west = await warehouses.AddAsync(new Warehouse { Name = "West DC", Location = "Reno, NV", Capacity = 8000 });
+        // "SEED-" prefix keeps these demo codes from ever colliding with the
+        // WH-N/WH-S/WH-E/WH-W/WH-C codes used by the sample import spreadsheets.
+        var east = await warehouses.AddAsync(new Warehouse { WarehouseCode = "SEED-E", WarehouseName = "East DC", City = "Columbus" });
+        var west = await warehouses.AddAsync(new Warehouse { WarehouseCode = "SEED-W", WarehouseName = "West DC", City = "Reno" });
 
-        await inventory.AddAsync(new InventoryItem { ProductId = widget.Id, WarehouseId = east.Id, QuantityOnHand = 500, ReorderLevel = 100 });
-        await inventory.AddAsync(new InventoryItem { ProductId = gadget.Id, WarehouseId = east.Id, QuantityOnHand = 20, ReorderLevel = 25 });
-        await inventory.AddAsync(new InventoryItem { ProductId = gadget.Id, WarehouseId = west.Id, QuantityOnHand = 150, ReorderLevel = 30 });
+        await inventory.AddAsync(new InventoryItem { ProductId = widget.Id, WarehouseId = east.Id, Quantity = 500 });
+        await inventory.AddAsync(new InventoryItem { ProductId = gadget.Id, WarehouseId = east.Id, Quantity = 20 });
+        await inventory.AddAsync(new InventoryItem { ProductId = gadget.Id, WarehouseId = west.Id, Quantity = 150 });
     }
 }

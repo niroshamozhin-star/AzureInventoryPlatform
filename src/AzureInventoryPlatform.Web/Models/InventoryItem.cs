@@ -13,8 +13,7 @@ public class InventoryItem : IEntity
     public int WarehouseId { get; set; }
 
     [Range(0, int.MaxValue)]
-    public int QuantityOnHand { get; set; }
+    public int Quantity { get; set; }
 
-    [Range(0, int.MaxValue)]
-    public int ReorderLevel { get; set; }
+    public DateTime LastUpdated { get; set; }
 }

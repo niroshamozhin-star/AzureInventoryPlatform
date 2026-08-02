@@ -13,9 +13,10 @@
         <tr>
             <th>Warehouse</th>
             <th>Product</th>
-            <th class="text-end">Qty On Hand</th>
+            <th class="text-end">Quantity</th>
             <th class="text-end">Reorder Level</th>
             <th>Status</th>
+            <th>Last Updated</th>
             <th class="text-end">Actions</th>
         </tr>
     </thead>
@@ -25,7 +26,7 @@
             <tr class="@(item.IsLowStock ? "table-warning" : "")">
                 <td>@item.WarehouseName</td>
                 <td>@item.ProductName</td>
-                <td class="text-end">@item.QuantityOnHand.ToString("N0")</td>
+                <td class="text-end">@item.Quantity.ToString("N0")</td>
                 <td class="text-end">@item.ReorderLevel.ToString("N0")</td>
                 <td>
                     @if (item.IsLowStock)
@@ -37,6 +38,7 @@
                         <span class="badge bg-success">OK</span>
                     }
                 </td>
+                <td>@item.LastUpdated.ToString("yyyy-MM-dd")</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" asp-action="Adjust" asp-route-id="@item.Id">Adjust</a>
                     <form asp-action="Delete" asp-route-id="@item.Id" class="d-inline"
@@ -48,7 +50,7 @@
         }
         @if (Model.Count == 0)
         {
-            <tr><td colspan="6" class="text-center text-muted">No inventory records yet.</td></tr>
+            <tr><td colspan="7" class="text-center text-muted">No inventory records yet.</td></tr>
         }
     </tbody>
 </table>

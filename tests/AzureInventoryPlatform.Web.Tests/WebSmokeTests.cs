@@ -78,8 +78,7 @@ public class WebSmokeTests : IClassFixture<WebApplicationFactory<Program>>
             ["__RequestVerificationToken"] = token,
             ["ProductId"] = "9999",
             ["WarehouseId"] = "1",
-            ["QuantityOnHand"] = "10",
-            ["ReorderLevel"] = "5",
+            ["Quantity"] = "10",
         }));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

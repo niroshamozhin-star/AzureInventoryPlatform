@@ -6,8 +6,9 @@ public record InventoryListItem(
     string ProductName,
     int WarehouseId,
     string WarehouseName,
-    int QuantityOnHand,
-    int ReorderLevel)
+    int Quantity,
+    int ReorderLevel,
+    DateTime LastUpdated)
 {
-    public bool IsLowStock => QuantityOnHand <= ReorderLevel;
+    public bool IsLowStock => Quantity <= ReorderLevel;
 }

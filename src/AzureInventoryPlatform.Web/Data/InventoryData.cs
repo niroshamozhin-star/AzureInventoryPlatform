@@ -21,7 +21,7 @@ public class InventoryData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT Id, ProductId, WarehouseId, QuantityOnHand, ReorderLevel FROM dbo.InventoryItems", connection);
+            "SELECT InventoryId, ProductId, WarehouseId, Quantity, LastUpdated FROM dbo.Inventory", connection);
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -37,7 +37,7 @@ public class InventoryData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT Id, ProductId, WarehouseId, QuantityOnHand, ReorderLevel FROM dbo.InventoryItems WHERE Id = @Id",
+            "SELECT InventoryId, ProductId, WarehouseId, Quantity, LastUpdated FROM dbo.Inventory WHERE InventoryId = @Id",
             connection);
         command.Parameters.AddWithValue("@Id", id);
 
@@ -47,14 +47,19 @@ public class InventoryData
 
     public async Task<InventoryItem> AddAsync(InventoryItem item)
     {
+        if (item.LastUpdated == default)
+        {
+            item.LastUpdated = DateTime.UtcNow;
+        }
+
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
             """
-            INSERT INTO dbo.InventoryItems (ProductId, WarehouseId, QuantityOnHand, ReorderLevel)
-            OUTPUT INSERTED.Id
-            VALUES (@ProductId, @WarehouseId, @QuantityOnHand, @ReorderLevel)
+            INSERT INTO dbo.Inventory (ProductId, WarehouseId, Quantity, LastUpdated)
+            OUTPUT INSERTED.InventoryId
+            VALUES (@ProductId, @WarehouseId, @Quantity, @LastUpdated)
             """, connection);
         AddParameters(command, item);
 
@@ -64,15 +69,16 @@ public class InventoryData
 
     public async Task<bool> UpdateAsync(InventoryItem item)
     {
+        item.LastUpdated = DateTime.UtcNow;
+
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
             """
-            UPDATE dbo.InventoryItems
-            SET ProductId = @ProductId, WarehouseId = @WarehouseId,
-                QuantityOnHand = @QuantityOnHand, ReorderLevel = @ReorderLevel
-            WHERE Id = @Id
+            UPDATE dbo.Inventory
+            SET ProductId = @ProductId, WarehouseId = @WarehouseId, Quantity = @Quantity, LastUpdated = @LastUpdated
+            WHERE InventoryId = @Id
             """, connection);
         AddParameters(command, item);
         command.Parameters.AddWithValue("@Id", item.Id);
@@ -85,7 +91,7 @@ public class InventoryData
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        await using var command = new SqlCommand("DELETE FROM dbo.InventoryItems WHERE Id = @Id", connection);
+        await using var command = new SqlCommand("DELETE FROM dbo.Inventory WHERE InventoryId = @Id", connection);
         command.Parameters.AddWithValue("@Id", id);
 
         return await command.ExecuteNonQueryAsync() > 0;
@@ -95,8 +101,8 @@ public class InventoryData
     {
         command.Parameters.AddWithValue("@ProductId", item.ProductId);
         command.Parameters.AddWithValue("@WarehouseId", item.WarehouseId);
-        command.Parameters.AddWithValue("@QuantityOnHand", item.QuantityOnHand);
-        command.Parameters.AddWithValue("@ReorderLevel", item.ReorderLevel);
+        command.Parameters.AddWithValue("@Quantity", item.Quantity);
+        command.Parameters.AddWithValue("@LastUpdated", item.LastUpdated);
     }
 
     private static InventoryItem Map(SqlDataReader reader) => new()
@@ -104,7 +110,7 @@ public class InventoryData
         Id = reader.GetInt32(0),
         ProductId = reader.GetInt32(1),
         WarehouseId = reader.GetInt32(2),
-        QuantityOnHand = reader.GetInt32(3),
-        ReorderLevel = reader.GetInt32(4),
+        Quantity = reader.GetInt32(3),
+        LastUpdated = reader.GetDateTime(4),
     };
 }

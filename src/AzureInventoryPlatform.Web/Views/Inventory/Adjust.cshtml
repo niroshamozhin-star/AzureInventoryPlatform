@@ -11,7 +11,7 @@
     <dt class="col-sm-4">Warehouse</dt>
     <dd class="col-sm-8">@ViewBag.WarehouseName</dd>
     <dt class="col-sm-4">Current Quantity</dt>
-    <dd class="col-sm-8">@Model.QuantityOnHand.ToString("N0")</dd>
+    <dd class="col-sm-8">@Model.Quantity.ToString("N0")</dd>
 </dl>
 
 <form asp-action="Adjust" asp-route-id="@Model.Id" class="col-md-6">

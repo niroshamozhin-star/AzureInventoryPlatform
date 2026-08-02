@@ -24,7 +24,9 @@ public class HomeController : Controller
         var products = await _products.GetAllAsync();
         var warehouses = await _warehouses.GetAllAsync();
         var inventory = await _inventory.GetAllAsync();
-        var lowStockCount = inventory.Count(i => i.QuantityOnHand <= i.ReorderLevel);
+        var productsById = products.ToDictionary(p => p.Id);
+        var lowStockCount = inventory.Count(i =>
+            productsById.TryGetValue(i.ProductId, out var product) && i.Quantity <= product.ReorderLevel);
 
         var viewModel = new DashboardViewModel(products.Count, warehouses.Count, inventory.Count, lowStockCount);
         return View(viewModel);

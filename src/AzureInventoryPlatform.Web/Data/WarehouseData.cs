@@ -21,7 +21,8 @@ public class WarehouseData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT Id, Name, Location, Capacity FROM dbo.Warehouses ORDER BY Name", connection);
+            "SELECT WarehouseId, WarehouseCode, WarehouseName, City FROM dbo.Warehouses ORDER BY WarehouseName",
+            connection);
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -37,7 +38,8 @@ public class WarehouseData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT Id, Name, Location, Capacity FROM dbo.Warehouses WHERE Id = @Id", connection);
+            "SELECT WarehouseId, WarehouseCode, WarehouseName, City FROM dbo.Warehouses WHERE WarehouseId = @Id",
+            connection);
         command.Parameters.AddWithValue("@Id", id);
 
         await using var reader = await command.ExecuteReaderAsync();
@@ -51,9 +53,9 @@ public class WarehouseData
 
         await using var command = new SqlCommand(
             """
-            INSERT INTO dbo.Warehouses (Name, Location, Capacity)
-            OUTPUT INSERTED.Id
-            VALUES (@Name, @Location, @Capacity)
+            INSERT INTO dbo.Warehouses (WarehouseCode, WarehouseName, City)
+            OUTPUT INSERTED.WarehouseId
+            VALUES (@WarehouseCode, @WarehouseName, @City)
             """, connection);
         AddParameters(command, warehouse);
 
@@ -67,7 +69,7 @@ public class WarehouseData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "UPDATE dbo.Warehouses SET Name = @Name, Location = @Location, Capacity = @Capacity WHERE Id = @Id",
+            "UPDATE dbo.Warehouses SET WarehouseCode = @WarehouseCode, WarehouseName = @WarehouseName, City = @City WHERE WarehouseId = @Id",
             connection);
         AddParameters(command, warehouse);
         command.Parameters.AddWithValue("@Id", warehouse.Id);
@@ -80,7 +82,7 @@ public class WarehouseData
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        await using var command = new SqlCommand("DELETE FROM dbo.Warehouses WHERE Id = @Id", connection);
+        await using var command = new SqlCommand("DELETE FROM dbo.Warehouses WHERE WarehouseId = @Id", connection);
         command.Parameters.AddWithValue("@Id", id);
 
         return await command.ExecuteNonQueryAsync() > 0;
@@ -88,16 +90,16 @@ public class WarehouseData
 
     private static void AddParameters(SqlCommand command, Warehouse warehouse)
     {
-        command.Parameters.AddWithValue("@Name", warehouse.Name);
-        command.Parameters.AddWithValue("@Location", warehouse.Location);
-        command.Parameters.AddWithValue("@Capacity", warehouse.Capacity);
+        command.Parameters.AddWithValue("@WarehouseCode", warehouse.WarehouseCode);
+        command.Parameters.AddWithValue("@WarehouseName", warehouse.WarehouseName);
+        command.Parameters.AddWithValue("@City", warehouse.City);
     }
 
     private static Warehouse Map(SqlDataReader reader) => new()
     {
         Id = reader.GetInt32(0),
-        Name = reader.GetString(1),
-        Location = reader.GetString(2),
-        Capacity = reader.GetInt32(3),
+        WarehouseCode = reader.GetString(1),
+        WarehouseName = reader.GetString(2),
+        City = reader.GetString(3),
     };
 }

@@ -22,21 +22,23 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 
 ## Features
 
-- **Products** — CRUD with SKU/name/category/unit price
-- **Warehouses** — CRUD with name/location/capacity
+- **Products** — CRUD with product code/name/unit price/reorder level
+- **Warehouses** — CRUD with warehouse code/name/city
 - **Inventory** — stock records linking a product to a warehouse, with a
   dedicated quantity-adjustment screen (`+`/`-` deltas rather than blind edits)
 - **Reports** — stock value summary per warehouse, and a low-stock alert list
-  (items at or below their reorder level), with the same rows visually flagged
-  wherever they appear (Inventory list and Reports page)
+  (items at or below their product's reorder level), with the same rows
+  visually flagged wherever they appear (Inventory list and Reports page)
 - **Dashboard** — live counts across all four modules on the landing page
+- **Excel import** — upload Products/Warehouses/Inventory spreadsheets and
+  insert them straight into Azure SQL via ADO.NET
 
 ## Azure Services Used
 
 | Service | Status | Purpose |
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
-| Azure SQL | 🔶 Phase 2 | Relational persistence via ADO.NET, replacing the in-memory store |
+| Azure SQL | ✅ Phase 2 | Relational persistence via ADO.NET, replacing the in-memory store |
 | JWT Authentication | ⬜ Phase 3 | Secures the app's endpoints with JWT bearer tokens |
 | Blob Storage | ⬜ Phase 4 | Product images, exported report files |
 | Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
@@ -96,7 +98,7 @@ feature of the app rather than an isolated demo:
 | # | Phase | Status | Docs |
 |---|-------|--------|------|
 | 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
-| 2 | Azure SQL | 🔶 Code done, Azure resource pending | [docs/learning-notes/phase-02-azure-sql.md](docs/learning-notes/phase-02-azure-sql.md) |
+| 2 | Azure SQL | ✅ Done | [docs/learning-notes/phase-02-azure-sql.md](docs/learning-notes/phase-02-azure-sql.md) |
 | 3 | JWT Authentication | ⬜ Not started | |
 | 4 | Blob Storage | ⬜ Not started | |
 | 5 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
@@ -159,11 +161,11 @@ dotnet test
 No secrets, connection strings, or credentials are committed to this repository.
 `.gitignore` excludes environment-specific config (`appsettings.Development.json`),
 Visual Studio publish profiles (`*.pubxml`, `Properties/ServiceDependencies/`),
-and common secret file patterns. As later phases introduce real Azure connection
-strings, they'll be sourced from
-[User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets) or
-environment variables locally, and **Managed Identity** (Phase 9) in Azure —
-never hardcoded in source.
+and common secret file patterns. The Azure SQL connection string is sourced from
+[User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets)
+locally and an App Service Connection String setting in Azure — `appsettings.json`
+only ever holds an empty placeholder. Later phases move this to
+**Managed Identity** (Phase 9), removing the password entirely.
 
 ## Cost philosophy
 

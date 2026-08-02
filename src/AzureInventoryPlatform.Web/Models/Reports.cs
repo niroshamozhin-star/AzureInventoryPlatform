@@ -8,5 +8,5 @@ public record LowStockAlert(
     string ProductName,
     int WarehouseId,
     string WarehouseName,
-    int QuantityOnHand,
+    int Quantity,
     int ReorderLevel);

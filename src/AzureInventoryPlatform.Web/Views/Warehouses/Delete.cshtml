@@ -8,12 +8,12 @@
 <div class="alert alert-warning">Are you sure you want to delete this warehouse?</div>
 
 <dl class="row col-md-6">
+    <dt class="col-sm-3">Warehouse Code</dt>
+    <dd class="col-sm-9">@Model.WarehouseCode</dd>
     <dt class="col-sm-3">Name</dt>
-    <dd class="col-sm-9">@Model.Name</dd>
-    <dt class="col-sm-3">Location</dt>
-    <dd class="col-sm-9">@Model.Location</dd>
-    <dt class="col-sm-3">Capacity</dt>
-    <dd class="col-sm-9">@Model.Capacity.ToString("N0")</dd>
+    <dd class="col-sm-9">@Model.WarehouseName</dd>
+    <dt class="col-sm-3">City</dt>
+    <dd class="col-sm-9">@Model.City</dd>
 </dl>
 
 <form asp-action="Delete" asp-route-id="@Model.Id">

@@ -26,14 +26,20 @@ public class InventoryController : Controller
         var warehouses = (await _warehouses.GetAllAsync()).ToDictionary(w => w.Id);
 
         var viewModel = items
-            .Select(i => new InventoryListItem(
-                i.Id,
-                i.ProductId,
-                products.TryGetValue(i.ProductId, out var product) ? product.Name : "(unknown product)",
-                i.WarehouseId,
-                warehouses.TryGetValue(i.WarehouseId, out var warehouse) ? warehouse.Name : "(unknown warehouse)",
-                i.QuantityOnHand,
-                i.ReorderLevel))
+            .Select(i =>
+            {
+                products.TryGetValue(i.ProductId, out var product);
+                warehouses.TryGetValue(i.WarehouseId, out var warehouse);
+                return new InventoryListItem(
+                    i.Id,
+                    i.ProductId,
+                    product?.ProductName ?? "(unknown product)",
+                    i.WarehouseId,
+                    warehouse?.WarehouseName ?? "(unknown warehouse)",
+                    i.Quantity,
+                    product?.ReorderLevel ?? 0,
+                    i.LastUpdated);
+            })
             .OrderBy(i => i.WarehouseName)
             .ThenBy(i => i.ProductName)
             .ToList();
@@ -82,8 +88,8 @@ public class InventoryController : Controller
 
         var product = await _products.GetByIdAsync(item.ProductId);
         var warehouse = await _warehouses.GetByIdAsync(item.WarehouseId);
-        ViewBag.ProductName = product?.Name ?? "(unknown product)";
-        ViewBag.WarehouseName = warehouse?.Name ?? "(unknown warehouse)";
+        ViewBag.ProductName = product?.ProductName ?? "(unknown product)";
+        ViewBag.WarehouseName = warehouse?.WarehouseName ?? "(unknown warehouse)";
         return View(item);
     }
 
@@ -97,14 +103,14 @@ public class InventoryController : Controller
             return NotFound();
         }
 
-        var newQuantity = item.QuantityOnHand + delta;
+        var newQuantity = item.Quantity + delta;
         if (newQuantity < 0)
         {
             TempData["Error"] = "Adjustment would result in negative quantity on hand.";
         }
         else
         {
-            item.QuantityOnHand = newQuantity;
+            item.Quantity = newQuantity;
             await _inventory.UpdateAsync(item);
             TempData["Success"] = "Quantity adjusted.";
         }
@@ -123,7 +129,7 @@ public class InventoryController : Controller
 
     private async Task PopulateDropdownsAsync()
     {
-        ViewBag.Products = new SelectList(await _products.GetAllAsync(), nameof(Product.Id), nameof(Product.Name));
-        ViewBag.Warehouses = new SelectList(await _warehouses.GetAllAsync(), nameof(Warehouse.Id), nameof(Warehouse.Name));
+        ViewBag.Products = new SelectList(await _products.GetAllAsync(), nameof(Product.Id), nameof(Product.ProductName));
+        ViewBag.Warehouses = new SelectList(await _warehouses.GetAllAsync(), nameof(Warehouse.Id), nameof(Warehouse.WarehouseName));
     }
 }

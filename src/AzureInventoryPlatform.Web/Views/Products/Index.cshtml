@@ -11,10 +11,10 @@
 <table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th>SKU</th>
+            <th>Product Code</th>
             <th>Name</th>
-            <th>Category</th>
             <th class="text-end">Unit Price</th>
+            <th class="text-end">Reorder Level</th>
             <th class="text-end">Actions</th>
         </tr>
     </thead>
@@ -22,10 +22,10 @@
         @foreach (var product in Model)
         {
             <tr>
-                <td>@product.Sku</td>
-                <td>@product.Name</td>
-                <td>@product.Category</td>
+                <td>@product.ProductCode</td>
+                <td>@product.ProductName</td>
                 <td class="text-end">@product.UnitPrice.ToString("C")</td>
+                <td class="text-end">@product.ReorderLevel.ToString("N0")</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
                     <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@product.Id">Delete</a>

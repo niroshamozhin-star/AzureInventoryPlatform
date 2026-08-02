@@ -11,9 +11,9 @@
 <table class="table table-striped align-middle">
     <thead>
         <tr>
+            <th>Warehouse Code</th>
             <th>Name</th>
-            <th>Location</th>
-            <th class="text-end">Capacity</th>
+            <th>City</th>
             <th class="text-end">Actions</th>
         </tr>
     </thead>
@@ -21,9 +21,9 @@
         @foreach (var warehouse in Model)
         {
             <tr>
-                <td>@warehouse.Name</td>
-                <td>@warehouse.Location</td>
-                <td class="text-end">@warehouse.Capacity.ToString("N0")</td>
+                <td>@warehouse.WarehouseCode</td>
+                <td>@warehouse.WarehouseName</td>
+                <td>@warehouse.City</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@warehouse.Id">Edit</a>
                     <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@warehouse.Id">Delete</a>
