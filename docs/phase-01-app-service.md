@@ -32,7 +32,7 @@ idle — acceptable for a learning project).
    - **Name**: something globally unique, e.g. `inventory-platform-<yourname>` (this
      becomes `https://inventory-platform-<yourname>.azurewebsites.net`).
    - **Publish**: `Code`.
-   - **Runtime stack**: `.NET 8 (LTS)`.
+   - **Runtime stack**: `.NET 10 (LTS)`.
    - **Operating System**: `Linux` (cheaper, and matches Phase 11's Docker image later).
    - **Region**: pick one close to you, e.g. `East US`.
 3. **App Service Plan** section → **Create new** → name it `plan-inventory-platform-dev`
@@ -43,7 +43,7 @@ idle — acceptable for a learning project).
 
 ## 3. Code
 
-A single ASP.NET Core 8 MVC app at `src/AzureInventoryPlatform.Web` — no separate
+A single ASP.NET Core 10 MVC app at `src/AzureInventoryPlatform.Web` — no separate
 API layer. Each later phase adds its Azure SDK calls directly into this app's
 controllers/services.
 
@@ -72,7 +72,7 @@ Run `dotnet test` from the repo root — all 7 pass.
 After the App Service is created, a few settings matter:
 
 1. **Configuration → General settings**:
-   - **Stack settings** should already show `.NET`, version `8 (LTS)`. If it
+   - **Stack settings** should already show `.NET`, version `10 (LTS)`. If it
      doesn't, set it explicitly.
    - **Platform settings → HTTPS Only**: switch to **On** (redirect all HTTP to
      HTTPS — free and App Service handles the cert for the `*.azurewebsites.net`

@@ -1,6 +1,6 @@
 # Azure Inventory Management & Reporting Platform
 
-A learning project that builds one ASP.NET Core 8 MVC app up incrementally, adding a
+A learning project that builds one ASP.NET Core 10 MVC app up incrementally, adding a
 single Azure service at a time, to cover the **AZ-204: Developing Solutions for
 Microsoft Azure** exam objectives hands-on. The app calls Azure SDKs directly from
 its controllers/services as each phase adds a new one — no separate Web API layer.
@@ -36,7 +36,7 @@ deployment, and how it was tested.
 ```
 AzureInventoryPlatform.sln
 src/
-  AzureInventoryPlatform.Web/    ASP.NET Core 8 MVC app — Products/Warehouses/
+  AzureInventoryPlatform.Web/    ASP.NET Core 10 MVC app — Products/Warehouses/
                                  Inventory/Reports, Bootstrap UI, calls Azure SDKs
                                  directly as each phase adds one
 tests/
