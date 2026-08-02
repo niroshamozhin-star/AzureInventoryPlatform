@@ -4,16 +4,20 @@ obj/
 out/
 *.user
 *.suo
-
-## Rider/VS
-.vs/
-.idea/
 *.userosscache
 *.sln.docstates
+
+## Rider/VS/VSCode
+.vs/
+.idea/
+.vscode/
 
 ## Test results
 [Tt]est[Rr]esult*/
 *.trx
+[Cc]overage/
+*.coverage
+*.coveragexml
 
 ## Publish output
 publish/
@@ -21,10 +25,20 @@ publish/
 *.pubxml
 **/Properties/ServiceDependencies/
 
+## Secrets and local-only configuration
+## appsettings.json (base config, no secrets) stays tracked; environment
+## overrides and anything secret-shaped never do.
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/appsettings.*.local.json
+secrets.json
+*.pfx
+*.snk
+.env
+.env.*
+
 ## Azure Functions
 local.settings.json
-bin/
-obj/
 
 ## OS
 .DS_Store
