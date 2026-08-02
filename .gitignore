@@ -1,0 +1,30 @@
+## .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+
+## Rider/VS
+.vs/
+.idea/
+*.userosscache
+*.sln.docstates
+
+## Test results
+[Tt]est[Rr]esult*/
+*.trx
+
+## Publish output
+publish/
+*.zip
+*.pubxml
+
+## Azure Functions
+local.settings.json
+bin/
+obj/
+
+## OS
+.DS_Store
+Thumbs.db
