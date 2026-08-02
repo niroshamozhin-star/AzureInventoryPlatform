@@ -1,0 +1,40 @@
+@model InventoryItem
+@{
+    ViewData["Title"] = "New Inventory Record";
+}
+
+<h1>New Inventory Record</h1>
+
+<form asp-action="Create" class="col-md-6">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="ProductId" class="form-label">Product</label>
+        <select asp-for="ProductId" asp-items="ViewBag.Products" class="form-select">
+            <option value="">-- Select a product --</option>
+        </select>
+        <span asp-validation-for="ProductId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="WarehouseId" class="form-label">Warehouse</label>
+        <select asp-for="WarehouseId" asp-items="ViewBag.Warehouses" class="form-select">
+            <option value="">-- Select a warehouse --</option>
+        </select>
+        <span asp-validation-for="WarehouseId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="QuantityOnHand" class="form-label"></label>
+        <input asp-for="QuantityOnHand" class="form-control" />
+        <span asp-validation-for="QuantityOnHand" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ReorderLevel" class="form-label"></label>
+        <input asp-for="ReorderLevel" class="form-control" />
+        <span asp-validation-for="ReorderLevel" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

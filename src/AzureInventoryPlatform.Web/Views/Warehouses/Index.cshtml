@@ -1,0 +1,38 @@
+@model IReadOnlyList<Warehouse>
+@{
+    ViewData["Title"] = "Warehouses";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Warehouses</h1>
+    <a class="btn btn-primary" asp-action="Create">+ New Warehouse</a>
+</div>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th class="text-end">Capacity</th>
+            <th class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var warehouse in Model)
+        {
+            <tr>
+                <td>@warehouse.Name</td>
+                <td>@warehouse.Location</td>
+                <td class="text-end">@warehouse.Capacity.ToString("N0")</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@warehouse.Id">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@warehouse.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        @if (Model.Count == 0)
+        {
+            <tr><td colspan="4" class="text-center text-muted">No warehouses yet.</td></tr>
+        }
+    </tbody>
+</table>

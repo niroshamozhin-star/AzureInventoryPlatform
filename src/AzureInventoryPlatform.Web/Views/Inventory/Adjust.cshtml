@@ -1,0 +1,24 @@
+@model InventoryItem
+@{
+    ViewData["Title"] = "Adjust Quantity";
+}
+
+<h1>Adjust Quantity</h1>
+
+<dl class="row col-md-6">
+    <dt class="col-sm-4">Product</dt>
+    <dd class="col-sm-8">@ViewBag.ProductName</dd>
+    <dt class="col-sm-4">Warehouse</dt>
+    <dd class="col-sm-8">@ViewBag.WarehouseName</dd>
+    <dt class="col-sm-4">Current Quantity</dt>
+    <dd class="col-sm-8">@Model.QuantityOnHand.ToString("N0")</dd>
+</dl>
+
+<form asp-action="Adjust" asp-route-id="@Model.Id" class="col-md-6">
+    <div class="mb-3">
+        <label for="delta" class="form-label">Adjustment (use a negative number to remove stock)</label>
+        <input type="number" id="delta" name="delta" class="form-control" value="0" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Apply</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>

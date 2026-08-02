@@ -36,19 +36,29 @@ deployment, and how it was tested.
 AzureInventoryPlatform.sln
 src/
   AzureInventoryPlatform.Api/     ASP.NET Core 8 Web API (Product/Warehouse/Inventory/Reports)
+  AzureInventoryPlatform.Web/     ASP.NET Core 8 MVC UI, consumes the Web API over HTTP
 tests/
   AzureInventoryPlatform.Api.Tests/   xUnit + WebApplicationFactory integration tests
 docs/
   phase-01-app-service.md, phase-02-azure-sql.md, ...
 ```
 
+The MVC UI (`AzureInventoryPlatform.Web`) isn't part of the AZ-204 phase sequence —
+it's a simple Bootstrap front end (dashboard + CRUD for Products/Warehouses/Inventory,
+a Reports page) that talks to the API via a typed `HttpClient` per module
+(`ApiClients/`), so there's something to click through instead of only curling
+JSON. Its `ApiBaseUrl` setting (`appsettings.json`) points at the API — update it
+once the API has a real Azure URL instead of localhost.
+
 ## Running locally
 
-```bash
-dotnet run --project src/AzureInventoryPlatform.Api
-```
+Run the API first, then the Web UI in a second terminal (the UI's `ApiBaseUrl`
+defaults to `http://localhost:5080`):
 
-Then open `http://localhost:5080/swagger` (or whatever port the console prints).
+```bash
+dotnet run --project src/AzureInventoryPlatform.Api   # http://localhost:5080/swagger
+dotnet run --project src/AzureInventoryPlatform.Web    # http://localhost:5104
+```
 
 ## Running tests
 

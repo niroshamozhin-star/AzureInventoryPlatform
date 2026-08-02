@@ -1,0 +1,51 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="mb-4">Inventory Dashboard</h1>
+
+<div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Products</h6>
+                <p class="display-6 mb-2">@Model.ProductCount</p>
+                <a class="stretched-link" asp-controller="Products" asp-action="Index">View products</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Warehouses</h6>
+                <p class="display-6 mb-2">@Model.WarehouseCount</p>
+                <a class="stretched-link" asp-controller="Warehouses" asp-action="Index">View warehouses</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Inventory Records</h6>
+                <p class="display-6 mb-2">@Model.InventoryItemCount</p>
+                <a class="stretched-link" asp-controller="Inventory" asp-action="Index">View inventory</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm @(Model.LowStockCount > 0 ? "border-warning" : "")">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small">Low Stock Alerts</h6>
+                <p class="display-6 mb-2 @(Model.LowStockCount > 0 ? "text-warning" : "")">@Model.LowStockCount</p>
+                <a class="stretched-link" asp-controller="Reports" asp-action="Index">View reports</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p class="text-muted">
+    This UI consumes the Azure Inventory Platform Web API. Data shown here is only as
+    fresh as the API's backing store (in-memory as of Phase 1 — will move to Azure SQL
+    in Phase 2).
+</p>
