@@ -1,4 +1,4 @@
-namespace AzureInventoryPlatform.Api.Models;
+namespace AzureInventoryPlatform.Contracts.Models;
 
 public interface IEntity
 {

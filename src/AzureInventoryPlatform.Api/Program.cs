@@ -1,5 +1,5 @@
 using AzureInventoryPlatform.Api;
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 using AzureInventoryPlatform.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);

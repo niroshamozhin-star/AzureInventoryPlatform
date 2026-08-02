@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\AzureInventoryPlatform.Api\AzureInventoryPlatform.Api.csproj" />
+    <ProjectReference Include="..\AzureInventoryPlatform.Contracts\AzureInventoryPlatform.Contracts.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

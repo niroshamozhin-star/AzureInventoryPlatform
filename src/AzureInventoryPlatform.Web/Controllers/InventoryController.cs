@@ -1,4 +1,4 @@
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 using AzureInventoryPlatform.Web.ApiClients;
 using AzureInventoryPlatform.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;

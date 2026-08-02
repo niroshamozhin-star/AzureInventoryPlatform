@@ -1,4 +1,4 @@
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 
 namespace AzureInventoryPlatform.Web.ApiClients;
 

@@ -35,8 +35,11 @@ deployment, and how it was tested.
 ```
 AzureInventoryPlatform.sln
 src/
-  AzureInventoryPlatform.Api/     ASP.NET Core 8 Web API (Product/Warehouse/Inventory/Reports)
-  AzureInventoryPlatform.Web/     ASP.NET Core 8 MVC UI, consumes the Web API over HTTP
+  AzureInventoryPlatform.Contracts/  Plain class library: Product/Warehouse/InventoryItem/
+                                      report models shared by Api and Web (no ASP.NET Core
+                                      framework reference — see note below)
+  AzureInventoryPlatform.Api/         ASP.NET Core 8 Web API (Product/Warehouse/Inventory/Reports)
+  AzureInventoryPlatform.Web/         ASP.NET Core 8 MVC UI, consumes the Web API over HTTP
 tests/
   AzureInventoryPlatform.Api.Tests/   xUnit + WebApplicationFactory integration tests
 docs/
@@ -49,6 +52,16 @@ a Reports page) that talks to the API via a typed `HttpClient` per module
 (`ApiClients/`), so there's something to click through instead of only curling
 JSON. Its `ApiBaseUrl` setting (`appsettings.json`) points at the API — update it
 once the API has a real Azure URL instead of localhost.
+
+**Why a separate `Contracts` project exists:** Web originally referenced Api directly
+to reuse its model classes. That broke at runtime — ASP.NET Core's controller
+discovery scans every referenced assembly that touches `Microsoft.AspNetCore.Mvc`,
+so Web ended up "discovering" Api's own controllers and trying to run them with
+Web's dependency injection container (which never registered `IRepository<T>`),
+crashing with `Unable to resolve service for type IRepository<Warehouse>`. Moving
+the shared models into a plain class library with no ASP.NET Core dependency
+(`Contracts`) and having both `Api` and `Web` reference *that* instead fixes it —
+`Contracts.dll` isn't a controller-discovery candidate, so nothing leaks across.
 
 ## Running locally
 

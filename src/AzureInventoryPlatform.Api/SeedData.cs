@@ -1,4 +1,4 @@
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 using AzureInventoryPlatform.Api.Repositories;
 
 namespace AzureInventoryPlatform.Api;

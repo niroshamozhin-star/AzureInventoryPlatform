@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 
 namespace AzureInventoryPlatform.Web.ApiClients;
 

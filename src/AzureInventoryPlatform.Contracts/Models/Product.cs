@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AzureInventoryPlatform.Api.Models;
+namespace AzureInventoryPlatform.Contracts.Models;
 
 public class Product : IEntity
 {

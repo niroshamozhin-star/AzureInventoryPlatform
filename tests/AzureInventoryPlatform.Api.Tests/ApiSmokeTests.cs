@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using AzureInventoryPlatform.Api.Models;
+using AzureInventoryPlatform.Contracts.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
