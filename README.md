@@ -1,5 +1,7 @@
 # Azure Inventory Management & Reporting Platform
 
+> This repository is a learning portfolio.
+
 An ASP.NET Core 8 MVC application for tracking products, warehouses, and stock
 levels — built as a hands-on learning project covering the **AZ-204: Developing
 Solutions for Microsoft Azure** exam objectives. Rather than a collection of
@@ -7,7 +9,7 @@ disconnected demos, it's one real application that grows a new Azure integration
 every phase, so each service is learned in the context of an actual feature it
 supports.
 
-## Overview
+## Project Overview
 
 The app models a small inventory operation: products live in warehouses, stock
 levels are tracked per product/warehouse pair, and reports surface stock summaries
@@ -15,7 +17,7 @@ and low-stock alerts. It starts simple (Phase 1: in-memory data, hosted on Azure
 App Service) and incrementally adopts Azure SQL, Blob Storage, Functions, Service
 Bus, Cosmos DB, Key Vault, Managed Identity, Application Insights, Azure Monitor,
 Docker, Container Registry, and GitHub Actions CI/CD — one phase, one Azure
-service, at a time. See [Progress](#progress) for what's done so far.
+service, at a time. See [Learning Journey](#learning-journey) for what's done so far.
 
 ## Features
 
@@ -28,7 +30,7 @@ service, at a time. See [Progress](#progress) for what's done so far.
   wherever they appear (Inventory list and Reports page)
 - **Dashboard** — live counts across all four modules on the landing page
 
-## Azure services used
+## Azure Services Used
 
 | Service | Status | Purpose |
 |---|---|---|
@@ -46,7 +48,7 @@ service, at a time. See [Progress](#progress) for what's done so far.
 | Azure Container Registry | ⬜ Phase 12 | Host the container image |
 | GitHub Actions | ⬜ Phase 13 | CI/CD straight from this repo |
 
-## Architecture
+## Architecture Diagram
 
 ![Architecture diagram](docs/architecture/architecture.png)
 
@@ -85,36 +87,10 @@ One project, calling Azure SDKs directly, sidesteps that entirely.
 |---|
 | ![Reports](docs/screenshots/reports.png) |
 
-## How to run locally
+## Learning Journey
 
-**Prerequisites:** [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-
-```bash
-git clone https://github.com/niroshamozhin-star/AzureInventoryPlatform.git
-cd AzureInventoryPlatform
-dotnet run --project src/AzureInventoryPlatform.Web
-```
-
-Open `http://localhost:5104`. The app seeds itself with sample products,
-warehouses, and inventory records on startup — no database or Azure resource
-required for Phase 1.
-
-Run the test suite with:
-
-```bash
-dotnet test
-```
-
-## Future enhancements
-
-Tracked as the remaining AZ-204 phases (see the [Azure services table](#azure-services-used)
-above), plus:
-- Authentication/authorization (Azure AD / Entra ID) once a real user model exists
-- Pagination and search on the Products/Inventory list pages
-- Exporting reports to Blob Storage as CSV/PDF (natural fit once Phase 3 lands)
-- A CI pipeline that runs `dotnet test` on every PR, ahead of the full CD story in Phase 13
-
-## Progress
+Each phase below covers one Azure service, learned in the context of a real
+feature of the app rather than an isolated demo:
 
 | # | Phase | Status | Docs |
 |---|-------|--------|------|
@@ -135,6 +111,35 @@ above), plus:
 Each phase gets its own write-up in `docs/learning-notes/` covering: business scenario, the
 Azure resource created, the code change, Azure Portal configuration steps,
 deployment, and how it was tested.
+
+## Future Enhancements
+
+Tracked as the remaining AZ-204 phases (see the [Azure services table](#azure-services-used)
+above), plus:
+- Authentication/authorization (Azure AD / Entra ID) once a real user model exists
+- Pagination and search on the Products/Inventory list pages
+- Exporting reports to Blob Storage as CSV/PDF (natural fit once Phase 3 lands)
+- A CI pipeline that runs `dotnet test` on every PR, ahead of the full CD story in Phase 13
+
+## How to run locally
+
+**Prerequisites:** [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+
+```bash
+git clone https://github.com/niroshamozhin-star/AzureInventoryPlatform.git
+cd AzureInventoryPlatform
+dotnet run --project src/AzureInventoryPlatform.Web
+```
+
+Open `http://localhost:5104`. The app seeds itself with sample products,
+warehouses, and inventory records on startup — no database or Azure resource
+required for Phase 1.
+
+Run the test suite with:
+
+```bash
+dotnet test
+```
 
 ## Security
 
