@@ -19,6 +19,7 @@ out/
 publish/
 *.zip
 *.pubxml
+**/Properties/ServiceDependencies/
 
 ## Azure Functions
 local.settings.json
