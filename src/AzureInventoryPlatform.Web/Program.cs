@@ -1,17 +1,15 @@
 using AzureInventoryPlatform.Web;
-using AzureInventoryPlatform.Web.Models;
-using AzureInventoryPlatform.Web.Repositories;
+using AzureInventoryPlatform.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHealthChecks();
 
-// In-memory for Phase 1. Phase 2 swaps these for EF Core/Azure SQL-backed
-// implementations of the same IRepository<T> contract without touching controllers.
-builder.Services.AddSingleton<IRepository<Product>, InMemoryRepository<Product>>();
-builder.Services.AddSingleton<IRepository<Warehouse>, InMemoryRepository<Warehouse>>();
-builder.Services.AddSingleton<IRepository<InventoryItem>, InMemoryRepository<InventoryItem>>();
+// Phase 2: direct ADO.NET access to Azure SQL, no repository abstraction.
+builder.Services.AddScoped<ProductData>();
+builder.Services.AddScoped<WarehouseData>();
+builder.Services.AddScoped<InventoryData>();
 
 var app = builder.Build();
 

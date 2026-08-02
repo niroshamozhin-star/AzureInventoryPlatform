@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
-using AzureInventoryPlatform.Web.Repositories;
 using AzureInventoryPlatform.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,14 +8,11 @@ namespace AzureInventoryPlatform.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IRepository<Product> _products;
-    private readonly IRepository<Warehouse> _warehouses;
-    private readonly IRepository<InventoryItem> _inventory;
+    private readonly ProductData _products;
+    private readonly WarehouseData _warehouses;
+    private readonly InventoryData _inventory;
 
-    public HomeController(
-        IRepository<Product> products,
-        IRepository<Warehouse> warehouses,
-        IRepository<InventoryItem> inventory)
+    public HomeController(ProductData products, WarehouseData warehouses, InventoryData inventory)
     {
         _products = products;
         _warehouses = warehouses;

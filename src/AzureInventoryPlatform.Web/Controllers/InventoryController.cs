@@ -1,5 +1,5 @@
+using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
-using AzureInventoryPlatform.Web.Repositories;
 using AzureInventoryPlatform.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,14 +8,11 @@ namespace AzureInventoryPlatform.Web.Controllers;
 
 public class InventoryController : Controller
 {
-    private readonly IRepository<InventoryItem> _inventory;
-    private readonly IRepository<Product> _products;
-    private readonly IRepository<Warehouse> _warehouses;
+    private readonly InventoryData _inventory;
+    private readonly ProductData _products;
+    private readonly WarehouseData _warehouses;
 
-    public InventoryController(
-        IRepository<InventoryItem> inventory,
-        IRepository<Product> products,
-        IRepository<Warehouse> warehouses)
+    public InventoryController(InventoryData inventory, ProductData products, WarehouseData warehouses)
     {
         _inventory = inventory;
         _products = products;

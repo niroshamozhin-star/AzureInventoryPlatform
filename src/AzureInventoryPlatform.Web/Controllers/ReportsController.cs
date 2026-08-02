@@ -1,19 +1,16 @@
+using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
-using AzureInventoryPlatform.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
 public class ReportsController : Controller
 {
-    private readonly IRepository<InventoryItem> _inventory;
-    private readonly IRepository<Product> _products;
-    private readonly IRepository<Warehouse> _warehouses;
+    private readonly InventoryData _inventory;
+    private readonly ProductData _products;
+    private readonly WarehouseData _warehouses;
 
-    public ReportsController(
-        IRepository<InventoryItem> inventory,
-        IRepository<Product> products,
-        IRepository<Warehouse> warehouses)
+    public ReportsController(InventoryData inventory, ProductData products, WarehouseData warehouses)
     {
         _inventory = inventory;
         _products = products;

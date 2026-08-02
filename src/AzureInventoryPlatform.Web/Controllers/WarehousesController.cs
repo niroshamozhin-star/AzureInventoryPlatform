@@ -1,14 +1,14 @@
+using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
-using AzureInventoryPlatform.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
 public class WarehousesController : Controller
 {
-    private readonly IRepository<Warehouse> _warehouses;
+    private readonly WarehouseData _warehouses;
 
-    public WarehousesController(IRepository<Warehouse> warehouses)
+    public WarehousesController(WarehouseData warehouses)
     {
         _warehouses = warehouses;
     }

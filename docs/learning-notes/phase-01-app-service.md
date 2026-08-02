@@ -52,9 +52,10 @@ controllers/services.
 - **Models**: `Product`, `Warehouse`, `InventoryItem` (all implement `IEntity` for a
   uniform `Id`), plus `WarehouseStockSummary`/`LowStockAlert` for reports.
 - **Repositories**: `IRepository<T>` + an `InMemoryRepository<T>` implementation
-  (thread-safe `ConcurrentDictionary`). This interface seam is deliberate — Phase 2
-  swaps in an EF Core/Azure SQL implementation, Phase 6 swaps in Cosmos DB for
-  reports, and controllers never change.
+  (thread-safe `ConcurrentDictionary`), as this phase's storage layer.
+  *(Update: Phase 2 removed this interface entirely rather than swapping in an
+  EF Core implementation behind it — see
+  [Phase 2's write-up](phase-02-azure-sql.md) for why.)*
 - **Controllers + Views**: `ProductsController`, `WarehousesController` (CRUD),
   `InventoryController` (CRUD + an Adjust-quantity screen), `ReportsController`
   (stock summary + low-stock alerts, joined across the other three repos),
@@ -138,9 +139,9 @@ Or open `https://inventory-platform-<yourname>.azurewebsites.net` in a browser a
 click through the same pages.
 
 **Automated:** `dotnet test` runs the 7 integration tests against an in-process
-`WebApplicationFactory` — no Azure resource needed for these to pass, which is the
-point of the repository abstraction: business logic is verified independent of
-where the app happens to be hosted.
+`WebApplicationFactory` — no Azure resource needed for these to pass, since
+Phase 1's storage is purely in-memory. (This changes in Phase 2: once the app
+moves to Azure SQL, the same tests need a reachable SQL Server.)
 
 ---
-**Next phase:** [Phase 2 — Azure SQL](phase-02-azure-sql.md) *(not started yet)*
+**Next phase:** [Phase 2 — Azure SQL](phase-02-azure-sql.md) *(code complete, Azure resource pending)*

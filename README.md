@@ -36,7 +36,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Service | Status | Purpose |
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
-| Azure SQL | ⬜ Phase 2 | Relational persistence via EF Core, replacing the in-memory store |
+| Azure SQL | 🔶 Phase 2 | Relational persistence via ADO.NET, replacing the in-memory store |
 | JWT Authentication | ⬜ Phase 3 | Secures the app's endpoints with JWT bearer tokens |
 | Blob Storage | ⬜ Phase 4 | Product images, exported report files |
 | Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
@@ -54,15 +54,14 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 
 ![Architecture diagram](docs/architecture/architecture.png)
 
-A single ASP.NET Core MVC app — no separate Web API layer. Controllers call
-Azure SDKs (or, for now, an in-memory store) directly through an `IRepository<T>`
-abstraction, so later phases can swap the storage backend without touching
-controllers or views:
+A single ASP.NET Core MVC app — no separate Web API layer and no repository
+abstraction. Controllers call plain ADO.NET data-access classes directly, which
+talk straight to Azure SQL:
 
 ```
 src/AzureInventoryPlatform.Web/
   Models/        Product, Warehouse, InventoryItem, report DTOs
-  Repositories/  IRepository<T> + current implementation
+  Data/          ProductData, WarehouseData, InventoryData — ADO.NET/SqlClient
   Controllers/   Products, Warehouses, Inventory, Reports, Home
   Views/         Razor + Bootstrap, light theme
 ```
@@ -97,7 +96,7 @@ feature of the app rather than an isolated demo:
 | # | Phase | Status | Docs |
 |---|-------|--------|------|
 | 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
-| 2 | Azure SQL | ⬜ Not started | |
+| 2 | Azure SQL | 🔶 Code done, Azure resource pending | [docs/learning-notes/phase-02-azure-sql.md](docs/learning-notes/phase-02-azure-sql.md) |
 | 3 | JWT Authentication | ⬜ Not started | |
 | 4 | Blob Storage | ⬜ Not started | |
 | 5 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
@@ -126,18 +125,30 @@ above), plus:
 ## How to run locally
 
 **Prerequisites:** [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+and a SQL Server instance — [SQL Server LocalDB](https://learn.microsoft.com/sql/database-engine/configure-windows/sql-server-express-localdb)
+(bundled with Visual Studio) works well for local dev.
 
 ```bash
 git clone https://github.com/niroshamozhin-star/AzureInventoryPlatform.git
 cd AzureInventoryPlatform
+
+# create the database and run the schema script once
+sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "CREATE DATABASE AzureInventoryPlatform"
+sqlcmd -S "(localdb)\MSSQLLocalDB" -d AzureInventoryPlatform -i sql/schema.sql
+
+# point the app at it (kept out of git via User Secrets)
+cd src/AzureInventoryPlatform.Web
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:InventoryDb" "Server=(localdb)\MSSQLLocalDB;Database=AzureInventoryPlatform;Trusted_Connection=True;TrustServerCertificate=True;"
+cd ../..
+
 dotnet run --project src/AzureInventoryPlatform.Web
 ```
 
 Open `http://localhost:5104`. The app seeds itself with sample products,
-warehouses, and inventory records on startup — no database or Azure resource
-required for Phase 1.
+warehouses, and inventory records on first run if the tables are empty.
 
-Run the test suite with:
+Run the test suite with (uses the same connection string, via the same User Secrets):
 
 ```bash
 dotnet test
