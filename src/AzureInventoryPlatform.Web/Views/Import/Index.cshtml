@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Import from Excel";
+}
+
+<h1 class="mb-3">Import from Excel</h1>
+<p class="text-muted">
+    Upload the three sample spreadsheets (Products, Warehouses, Inventory) to insert
+    them into Azure SQL via ADO.NET. Inventory rows reference products/warehouses by
+    <code>ProductCode</code>/<code>WarehouseCode</code>, which are matched up in memory
+    during this import and turned into the real database Ids.
+</p>
+
+<form asp-action="Index" method="post" enctype="multipart/form-data" class="col-md-6">
+    <div class="mb-3">
+        <label class="form-label">Products.xlsx</label>
+        <input type="file" name="productsFile" accept=".xlsx" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Warehouses.xlsx</label>
+        <input type="file" name="warehousesFile" accept=".xlsx" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Inventory.xlsx</label>
+        <input type="file" name="inventoryFile" accept=".xlsx" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+</form>
