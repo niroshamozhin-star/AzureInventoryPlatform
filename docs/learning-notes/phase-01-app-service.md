@@ -19,9 +19,9 @@ checks.
 
 ## 2. Azure resource to create
 
-Cost: **App Service Plan tier F1 (Free)** — $0/month, shared compute, 60 CPU
-minutes/day, no custom domain/SSL, no "Always On" (the app cold-starts after ~20 min
-idle — acceptable for a learning project).
+Cost: **App Service Plan tier S1 (Standard)** — deployed on Windows, covered by
+Azure free-trial credit for this project. (A Linux F1 Free tier would also work
+for a learning project — see the note at the end of this section.)
 
 ### Portal steps
 1. Portal search bar → **App Services** → **+ Create** → **Web App**.
@@ -33,10 +33,12 @@ idle — acceptable for a learning project).
      becomes `https://inventory-platform-<yourname>.azurewebsites.net`).
    - **Publish**: `Code`.
    - **Runtime stack**: `.NET 8 (LTS)`.
-   - **Operating System**: `Linux` (cheaper, and matches Phase 11's Docker image later).
-   - **Region**: pick one close to you, e.g. `East US`.
+   - **Operating System**: `Windows` (this project's actual deployment; a Linux
+     plan works too and is cheaper if you want the F1 Free tier instead).
+   - **Region**: pick one close to you, e.g. `Central India`.
 3. **App Service Plan** section → **Create new** → name it `plan-inventory-platform-dev`
-   → click **Change size**, pick the **Dev/Test** tab → select **F1 Free**.
+   → click **Change size** and pick a tier (this project uses **S1 Standard**;
+   pick the **Dev/Test** tab → **F1 Free** instead if you want a $0/month plan).
 4. **Monitoring** tab: leave "Enable Application Insights" as **No** for now — we
    wire that up deliberately in Phase 9 so you see exactly what it adds.
 5. **Review + create** → **Create**. Takes ~1 minute.
@@ -77,9 +79,8 @@ After the App Service is created, a few settings matter:
    - **Platform settings → HTTPS Only**: switch to **On** (redirect all HTTP to
      HTTPS — free and App Service handles the cert for the `*.azurewebsites.net`
      domain automatically).
-   - **Always On**: greyed out on F1 Free (only available on Basic tier and above).
-     This means the app can cold-start after ~20 minutes idle — fine here, but
-     worth knowing for production sizing decisions.
+   - **Always On**: available on S1 Standard and above (greyed out on the F1 Free
+     tier, where the app cold-starts after ~20 minutes idle instead).
 2. **Monitoring → Health check**:
    - Enable it, path = `/health` (the endpoint `Program.cs` maps). App Service will
      ping this and route traffic away from unhealthy instances once you scale to

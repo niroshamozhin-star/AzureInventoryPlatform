@@ -35,7 +35,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 
 | Service | Status | Purpose |
 |---|---|---|
-| Azure App Service | ✅ Phase 1 | Hosts the MVC app (Linux, F1 Free tier) |
+| Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
 | Azure SQL | ⬜ Phase 2 | Relational persistence via EF Core, replacing the in-memory store |
 | JWT Authentication | ⬜ Phase 3 | Secures the app's endpoints with JWT bearer tokens |
 | Blob Storage | ⬜ Phase 4 | Product images, exported report files |
@@ -156,12 +156,13 @@ never hardcoded in source.
 
 ## Cost philosophy
 
-This is a personal learning/portfolio project — every phase defaults to the
-**free or cheapest tier** of each Azure service (App Service F1 Free, Azure SQL
-serverless free offer, Cosmos DB free tier, Functions Consumption plan, Service Bus
-Basic, etc.). The one paid exception is **Azure Container Registry** (Phase 13,
-Basic tier ≈ $0.17/day) — there's no free ACR tier. Each phase's doc calls out the
-tier used and its cost.
+This is a personal learning/portfolio project — most phases default to the
+**free or cheapest tier** of each Azure service (Azure SQL serverless free offer,
+Cosmos DB free tier, Functions Consumption plan, Service Bus Basic, etc.), covered
+by an Azure free-trial subscription. Two exceptions: **App Service** (Phase 1) runs
+on **S1 Standard/Windows** rather than the F1 Free tier, and **Azure Container
+Registry** (Phase 13, Basic tier ≈ $0.17/day) has no free tier at all. Each
+phase's doc calls out the tier used and its cost.
 
 ## License
 
