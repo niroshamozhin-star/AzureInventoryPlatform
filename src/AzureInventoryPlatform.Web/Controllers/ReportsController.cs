@@ -1,9 +1,11 @@
 using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
+[Authorize]
 public class ReportsController : Controller
 {
     private readonly InventoryData _inventory;
@@ -17,17 +19,14 @@ public class ReportsController : Controller
         _warehouses = warehouses;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index() => RedirectToAction(nameof(InventoryByWarehouse));
+
+    public async Task<IActionResult> InventoryByWarehouse()
     {
-        var inventory = await _inventory.GetAllAsync();
-        var products = (await _products.GetAllAsync()).ToDictionary(p => p.Id);
-        var warehouses = (await _warehouses.GetAllAsync()).ToDictionary(w => w.Id);
+        var (_, products, warehouses) = await LoadDataAsync();
 
-        var relevantInventory = inventory
+        var stockValue = (await _inventory.GetAllAsync())
             .Where(i => products.ContainsKey(i.ProductId) && warehouses.ContainsKey(i.WarehouseId))
-            .ToList();
-
-        var stockSummary = relevantInventory
             .GroupBy(i => i.WarehouseId)
             .Select(g => new WarehouseStockSummary(
                 g.Key,
@@ -37,7 +36,15 @@ public class ReportsController : Controller
             .OrderBy(s => s.WarehouseName)
             .ToList();
 
-        var lowStock = relevantInventory
+        return View(stockValue);
+    }
+
+    public async Task<IActionResult> LowStock()
+    {
+        var (inventory, products, warehouses) = await LoadDataAsync();
+
+        var lowStock = inventory
+            .Where(i => products.ContainsKey(i.ProductId) && warehouses.ContainsKey(i.WarehouseId))
             .Where(i => i.Quantity <= products[i.ProductId].ReorderLevel)
             .Select(i => new LowStockAlert(
                 i.Id,
@@ -50,7 +57,14 @@ public class ReportsController : Controller
             .OrderBy(a => a.Quantity)
             .ToList();
 
-        ViewBag.LowStock = lowStock;
-        return View(stockSummary);
+        return View(lowStock);
+    }
+
+    private async Task<(IReadOnlyList<InventoryItem> Inventory, Dictionary<int, Product> Products, Dictionary<int, Warehouse> Warehouses)> LoadDataAsync()
+    {
+        var inventory = await _inventory.GetAllAsync();
+        var products = (await _products.GetAllAsync()).ToDictionary(p => p.Id);
+        var warehouses = (await _warehouses.GetAllAsync()).ToDictionary(w => w.Id);
+        return (inventory, products, warehouses);
     }
 }

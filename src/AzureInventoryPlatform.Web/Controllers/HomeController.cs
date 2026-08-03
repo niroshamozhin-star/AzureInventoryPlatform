@@ -2,10 +2,12 @@ using System.Diagnostics;
 using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
 using AzureInventoryPlatform.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ProductData _products;

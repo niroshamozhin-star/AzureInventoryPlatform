@@ -14,7 +14,7 @@ supports.
 The app models a small inventory operation: products live in warehouses, stock
 levels are tracked per product/warehouse pair, and reports surface stock summaries
 and low-stock alerts. It starts simple (Phase 1: in-memory data, hosted on Azure
-App Service) and incrementally adopts Azure SQL, JWT Authentication, Blob
+App Service) and incrementally adopts Azure SQL, Authentication, Blob
 Storage, Functions, Service Bus, Cosmos DB, Key Vault, Managed Identity,
 Application Insights, Azure Monitor, Docker, Container Registry, and GitHub
 Actions CI/CD — one phase, one Azure service, at a time. See
@@ -39,7 +39,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
 | Azure SQL | ✅ Phase 2 | Relational persistence via ADO.NET, replacing the in-memory store |
-| JWT Authentication | ⬜ Phase 3 | Secures the app's endpoints with JWT bearer tokens |
+| Authentication | ✅ Phase 3 | Cookie-based login secures every page in the app |
 | Blob Storage | ⬜ Phase 4 | Product images, exported report files |
 | Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
 | Service Bus | ⬜ Phase 6 | Async inventory-changed events |
@@ -99,7 +99,7 @@ feature of the app rather than an isolated demo:
 |---|-------|--------|------|
 | 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
 | 2 | Azure SQL | ✅ Done | [docs/learning-notes/phase-02-azure-sql.md](docs/learning-notes/phase-02-azure-sql.md) |
-| 3 | JWT Authentication | ⬜ Not started | |
+| 3 | Authentication | ✅ Done | [docs/learning-notes/phase-03-authentication.md](docs/learning-notes/phase-03-authentication.md) |
 | 4 | Blob Storage | ⬜ Not started | |
 | 5 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
 | 6 | Service Bus | ⬜ Not started | |

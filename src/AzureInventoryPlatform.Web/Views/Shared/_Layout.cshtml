@@ -18,26 +18,41 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Warehouses" asp-action="Index">Warehouses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Inventory" asp-action="Index">Inventory</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Reports" asp-action="Index">Reports</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Import" asp-action="Index">Import</a>
-                        </li>
-                    </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Warehouses" asp-action="Index">Warehouses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Inventory" asp-action="Index">Inventory</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Reports" asp-action="InventoryByWarehouse">Inventory by Warehouse</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reports" asp-action="LowStock">Low Stock Report</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Import" asp-action="Index">Import</a>
+                            </li>
+                        </ul>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-flex align-items-center">
+                            <span class="text-muted small me-2">@User.Identity!.Name</span>
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Log out</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
                 </div>
             </div>
         </nav>

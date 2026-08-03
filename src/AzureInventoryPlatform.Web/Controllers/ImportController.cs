@@ -2,10 +2,12 @@ using System.Globalization;
 using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
+[Authorize]
 public class ImportController : Controller
 {
     private readonly ProductData _products;

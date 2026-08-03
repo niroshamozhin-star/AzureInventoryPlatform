@@ -182,4 +182,4 @@ storage, not an accident.
 
 ---
 **Previous phase:** [Phase 1 — App Service](phase-01-app-service.md)
-**Next phase:** [Phase 3 — JWT Authentication](phase-03-jwt-authentication.md) *(not started yet)*
+**Next phase:** [Phase 3 — Authentication](phase-03-authentication.md)

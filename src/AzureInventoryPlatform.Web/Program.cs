@@ -1,5 +1,6 @@
 using AzureInventoryPlatform.Web;
 using AzureInventoryPlatform.Web.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,18 @@ builder.Services.AddHealthChecks();
 builder.Services.AddScoped<ProductData>();
 builder.Services.AddScoped<WarehouseData>();
 builder.Services.AddScoped<InventoryData>();
+
+// Phase 3: cookie-based login for the whole app. Every controller is
+// [Authorize] by default except AccountController (Login/Logout), which is
+// [AllowAnonymous] - unauthenticated requests get redirected to LoginPath.
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
+    });
 
 var app = builder.Build();
 
@@ -23,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

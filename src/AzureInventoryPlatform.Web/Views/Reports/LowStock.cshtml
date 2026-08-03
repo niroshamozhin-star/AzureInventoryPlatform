@@ -1,0 +1,32 @@
+@model IReadOnlyList<LowStockAlert>
+@{
+    ViewData["Title"] = "Low Stock Report";
+}
+
+<h1 class="mb-4">Low Stock Report</h1>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th class="text-end">Qty On Hand</th>
+            <th class="text-end">Reorder Level</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alert in Model)
+        {
+            <tr class="table-warning">
+                <td>@alert.ProductName</td>
+                <td>@alert.WarehouseName</td>
+                <td class="text-end">@alert.Quantity.ToString("N0")</td>
+                <td class="text-end">@alert.ReorderLevel.ToString("N0")</td>
+            </tr>
+        }
+        @if (Model.Count == 0)
+        {
+            <tr><td colspan="4" class="text-center text-muted">Nothing below reorder level.</td></tr>
+        }
+    </tbody>
+</table>

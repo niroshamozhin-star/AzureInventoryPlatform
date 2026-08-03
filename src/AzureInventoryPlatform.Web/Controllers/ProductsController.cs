@@ -1,9 +1,11 @@
 using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureInventoryPlatform.Web.Controllers;
 
+[Authorize]
 public class ProductsController : Controller
 {
     private readonly ProductData _products;
