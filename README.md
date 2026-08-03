@@ -37,7 +37,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Service | Status | Purpose |
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
-| Azure SQL | ✅ Phase 2 | Import excel from application to Azure SQL DB |
+| Azure SQL | ✅ Phase 2 | Import excel from application through ADO .Net to Azure SQL DB |
 | Authentication | ✅ Phase 3 | Cookie-based login secures every page in the app |
 | Blob Storage | ⬜ Phase 4 | Product images, exported report files |
 | Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
