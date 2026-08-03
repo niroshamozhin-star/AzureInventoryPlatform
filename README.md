@@ -3,9 +3,8 @@
 > This repository is a learning portfolio.
 
 An ASP.NET Core 8 MVC application for tracking products, warehouses, and stock
-levels — built as a hands-on learning project covering the **AZ-204: Developing
-Solutions for Microsoft Azure** topics. Rather than a collection of
-disconnected demos, it's one real application that grows a new Azure integration
+levels, built as a hands-on learning project covering the **AZ-204: Developing
+Solutions for Microsoft Azure** topics. It's one real application that grows a new Azure integration
 every phase, so each service is learned in the context of an actual feature it
 supports.
 
