@@ -1,5 +1,9 @@
 # Azure Inventory Management & Reporting Platform
 
+Azure cloud URL : https://niro-inventory-webapp-brbsh8cqcdbwegdw.centralindia-01.azurewebsites.net/Account/Login
+User name : admin
+Password : Learn-Az204!
+
 > This repository is a learning portfolio.
 
 An ASP.NET Core 8 MVC application for tracking products, warehouses, and stock
