@@ -39,8 +39,8 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
 | Azure SQL | ✅ Phase 2 | Import excel from application to Azure SQL DB |
 | Authentication | ✅ Phase 3 | Cookie-based login secures every page in the app |
-| Blob Storage | ⬜ Phase 4 | Product images, exported report files |
-| Azure Functions | ⬜ Phase 5 | HTTP, Blob-triggered, and Timer-triggered background work |
+| Blob Storage | ✅ Phase 4 | Product image uploads, served via a public blob container |
+| Azure Functions | ✅ Phase 5 | Standalone HTTP-triggered API (isolated worker), JWT-secured |
 | Service Bus | ⬜ Phase 6 | Async inventory-changed events |
 | Cosmos DB | ⬜ Phase 7 | Denormalized store for the Reports module |
 | Key Vault | ⬜ Phase 8 | Secrets/connection strings out of config files |
@@ -99,8 +99,8 @@ feature of the app rather than an isolated demo:
 | 1 | App Service | ✅ Done | [docs/learning-notes/phase-01-app-service.md](docs/learning-notes/phase-01-app-service.md) |
 | 2 | Azure SQL | ✅ Done | [docs/learning-notes/phase-02-azure-sql.md](docs/learning-notes/phase-02-azure-sql.md) |
 | 3 | Authentication | ✅ Done | [docs/learning-notes/phase-03-authentication.md](docs/learning-notes/phase-03-authentication.md) |
-| 4 | Blob Storage | ⬜ Not started | |
-| 5 | Azure Functions (HTTP, Blob, Timer) | ⬜ Not started | |
+| 4 | Blob Storage | ✅ Done | [docs/learning-notes/phase-04-blob-storage.md](docs/learning-notes/phase-04-blob-storage.md) |
+| 5 | Azure Functions (HTTP trigger) | ✅ Done | [docs/learning-notes/phase-05-azure-functions.md](docs/learning-notes/phase-05-azure-functions.md) |
 | 6 | Service Bus | ⬜ Not started | |
 | 7 | Cosmos DB | ⬜ Not started | |
 | 8 | Key Vault | ⬜ Not started | |

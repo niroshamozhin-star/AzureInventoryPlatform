@@ -9,10 +9,12 @@ namespace AzureInventoryPlatform.Web.Controllers;
 public class ProductsController : Controller
 {
     private readonly ProductData _products;
+    private readonly ProductImageStorage _images;
 
-    public ProductsController(ProductData products)
+    public ProductsController(ProductData products, ProductImageStorage images)
     {
         _products = products;
+        _images = images;
     }
 
     public async Task<IActionResult> Index() => View(await _products.GetAllAsync());
@@ -21,11 +23,16 @@ public class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Product product)
+    public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
     {
         if (!ModelState.IsValid)
         {
             return View(product);
+        }
+
+        if (imageFile is { Length: > 0 })
+        {
+            product.ImageUrl = await _images.UploadAsync(imageFile);
         }
 
         await _products.AddAsync(product);
@@ -41,7 +48,7 @@ public class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Product product)
+    public async Task<IActionResult> Edit(int id, Product product, IFormFile? imageFile)
     {
         if (id != product.Id)
         {
@@ -51,6 +58,19 @@ public class ProductsController : Controller
         if (!ModelState.IsValid)
         {
             return View(product);
+        }
+
+        if (imageFile is { Length: > 0 })
+        {
+            // product.ImageUrl still holds the *old* URL here (carried forward by
+            // the Edit view's hidden field) - delete that blob before overwriting
+            // it, so replacing an image doesn't leave the old one as an orphan.
+            if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                await _images.DeleteAsync(product.ImageUrl);
+            }
+
+            product.ImageUrl = await _images.UploadAsync(imageFile);
         }
 
         await _products.UpdateAsync(product);
@@ -68,6 +88,12 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
+        var product = await _products.GetByIdAsync(id);
+        if (product is { ImageUrl: not null })
+        {
+            await _images.DeleteAsync(product.ImageUrl);
+        }
+
         await _products.DeleteAsync(id);
         TempData["Success"] = "Product deleted.";
         return RedirectToAction(nameof(Index));

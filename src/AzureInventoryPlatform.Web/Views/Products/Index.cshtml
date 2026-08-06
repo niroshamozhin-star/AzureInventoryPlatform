@@ -11,6 +11,7 @@
 <table class="table table-striped align-middle">
     <thead>
         <tr>
+            <th>Image</th>
             <th>Product Code</th>
             <th>Name</th>
             <th class="text-end">Unit Price</th>
@@ -22,6 +23,16 @@
         @foreach (var product in Model)
         {
             <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" alt="@product.ProductName" style="height: 48px;" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <span class="text-muted small">No image</span>
+                    }
+                </td>
                 <td>@product.ProductCode</td>
                 <td>@product.ProductName</td>
                 <td class="text-end">@product.UnitPrice.ToString("C")</td>
@@ -34,7 +45,7 @@
         }
         @if (Model.Count == 0)
         {
-            <tr><td colspan="5" class="text-center text-muted">No products yet.</td></tr>
+            <tr><td colspan="6" class="text-center text-muted">No products yet.</td></tr>
         }
     </tbody>
 </table>

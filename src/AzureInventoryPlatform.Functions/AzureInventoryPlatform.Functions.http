@@ -1,0 +1,29 @@
+@HostAddress = http://localhost:7179
+
+### 1. Get a JWT token (HTTP trigger: GetToken)
+POST {{HostAddress}}/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Learn-Az204!"
+}sorry at #2
+
+### 2. Call the low-stock report (HTTP trigger: GetLowStockReport)
+# Paste the "token" value from request #1's response into {{token}} below before sending.
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJleHAiOjE3ODU5OTg4NjIsImlzcyI6IkF6dXJlSW52ZW50b3J5UGxhdGZvcm0uRnVuY3Rpb25zIiwiYXVkIjoiQXp1cmVJbnZlbnRvcnlQbGF0Zm9ybS5GdW5jdGlvbnMifQ.zCbHn_iM1ZYlvA0lrS6Mu203Auymf6abBQP5LfCTIMw
+
+GET {{HostAddress}}/api/reports/low-stock
+Authorization: Bearer {{token}}
+
+### 3. Negative test - should return 401 (no Authorization header)
+GET {{HostAddress}}/api/reports/low-stock
+
+### 4. Manually fire the Timer trigger right now (LowStockTimerCheck)
+# Result appears in the Output window, not here - this request will just return 202/200.
+POST {{HostAddress}}/admin/functions/LowStockTimerCheck
+Content-Type: application/json
+
+{
+  "input": ""
+}

@@ -5,12 +5,16 @@
 
 <h1>New Product</h1>
 
-<form asp-action="Create" class="col-md-6">
+<form asp-action="Create" enctype="multipart/form-data" class="col-md-6">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="ProductCode" class="form-label"></label>
         <input asp-for="ProductCode" class="form-control" />
         <span asp-validation-for="ProductCode" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Product Image (optional)</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
     </div>
     <div class="mb-3">
         <label asp-for="ProductName" class="form-label"></label>

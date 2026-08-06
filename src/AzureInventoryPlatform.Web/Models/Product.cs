@@ -17,4 +17,7 @@ public class Product : IEntity
 
     [Range(0, int.MaxValue)]
     public int ReorderLevel { get; set; }
+
+    [MaxLength(500)]
+    public string? ImageUrl { get; set; }
 }

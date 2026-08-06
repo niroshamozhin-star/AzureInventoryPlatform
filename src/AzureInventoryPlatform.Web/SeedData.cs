@@ -12,7 +12,13 @@ public static class SeedData
         var warehouses = scope.ServiceProvider.GetRequiredService<WarehouseData>();
         var inventory = scope.ServiceProvider.GetRequiredService<InventoryData>();
 
-        if ((await products.GetAllAsync()).Count > 0)
+        // Products can now be cleared independently of Warehouses (e.g. a manual
+        // reset), so "Products is empty" alone no longer proves this is a fresh
+        // database - also check the seed warehouses specifically, so a cleared
+        // Products table doesn't cause a second, colliding insert of SEED-E/SEED-W.
+        var existingWarehouses = await warehouses.GetAllAsync();
+        if ((await products.GetAllAsync()).Count > 0 ||
+            existingWarehouses.Any(w => w.WarehouseCode is "SEED-E" or "SEED-W"))
         {
             return;
         }

@@ -21,7 +21,7 @@ public class ProductData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT ProductId, ProductCode, ProductName, UnitPrice, ReorderLevel FROM dbo.Products ORDER BY ProductName",
+            "SELECT ProductId, ProductCode, ProductName, UnitPrice, ReorderLevel, ImageUrl FROM dbo.Products ORDER BY ProductName",
             connection);
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
@@ -38,7 +38,7 @@ public class ProductData
         await connection.OpenAsync();
 
         await using var command = new SqlCommand(
-            "SELECT ProductId, ProductCode, ProductName, UnitPrice, ReorderLevel FROM dbo.Products WHERE ProductId = @Id",
+            "SELECT ProductId, ProductCode, ProductName, UnitPrice, ReorderLevel, ImageUrl FROM dbo.Products WHERE ProductId = @Id",
             connection);
         command.Parameters.AddWithValue("@Id", id);
 
@@ -53,9 +53,9 @@ public class ProductData
 
         await using var command = new SqlCommand(
             """
-            INSERT INTO dbo.Products (ProductCode, ProductName, UnitPrice, ReorderLevel)
+            INSERT INTO dbo.Products (ProductCode, ProductName, UnitPrice, ReorderLevel, ImageUrl)
             OUTPUT INSERTED.ProductId
-            VALUES (@ProductCode, @ProductName, @UnitPrice, @ReorderLevel)
+            VALUES (@ProductCode, @ProductName, @UnitPrice, @ReorderLevel, @ImageUrl)
             """, connection);
         AddParameters(command, product);
 
@@ -71,11 +71,24 @@ public class ProductData
         await using var command = new SqlCommand(
             """
             UPDATE dbo.Products
-            SET ProductCode = @ProductCode, ProductName = @ProductName, UnitPrice = @UnitPrice, ReorderLevel = @ReorderLevel
+            SET ProductCode = @ProductCode, ProductName = @ProductName, UnitPrice = @UnitPrice, ReorderLevel = @ReorderLevel, ImageUrl = @ImageUrl
             WHERE ProductId = @Id
             """, connection);
         AddParameters(command, product);
         command.Parameters.AddWithValue("@Id", product.Id);
+
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<bool> UpdateImageUrlAsync(int id, string imageUrl)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        await using var command = new SqlCommand(
+            "UPDATE dbo.Products SET ImageUrl = @ImageUrl WHERE ProductId = @Id", connection);
+        command.Parameters.AddWithValue("@ImageUrl", imageUrl);
+        command.Parameters.AddWithValue("@Id", id);
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -97,6 +110,7 @@ public class ProductData
         command.Parameters.AddWithValue("@ProductName", product.ProductName);
         command.Parameters.AddWithValue("@UnitPrice", product.UnitPrice);
         command.Parameters.AddWithValue("@ReorderLevel", product.ReorderLevel);
+        command.Parameters.AddWithValue("@ImageUrl", (object?)product.ImageUrl ?? DBNull.Value);
     }
 
     private static Product Map(SqlDataReader reader) => new()
@@ -106,5 +120,6 @@ public class ProductData
         ProductName = reader.GetString(2),
         UnitPrice = reader.GetDecimal(3),
         ReorderLevel = reader.GetInt32(4),
+        ImageUrl = reader.IsDBNull(5) ? null : reader.GetString(5),
     };
 }

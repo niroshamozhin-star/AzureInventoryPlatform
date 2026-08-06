@@ -10,7 +10,8 @@ BEGIN
         ProductCode  NVARCHAR(20)  NOT NULL UNIQUE,
         ProductName  NVARCHAR(200) NOT NULL,
         UnitPrice    DECIMAL(18,2) NOT NULL,
-        ReorderLevel INT           NOT NULL
+        ReorderLevel INT           NOT NULL,
+        ImageUrl     NVARCHAR(500) NULL
     );
 
     CREATE TABLE dbo.Warehouses

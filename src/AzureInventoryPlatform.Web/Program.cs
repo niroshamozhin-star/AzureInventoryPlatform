@@ -12,6 +12,11 @@ builder.Services.AddScoped<ProductData>();
 builder.Services.AddScoped<WarehouseData>();
 builder.Services.AddScoped<InventoryData>();
 
+// Phase 4: Blob Storage for product images. Singleton, not scoped - the
+// Azure SDK's BlobContainerClient is documented as safe to reuse across
+// requests, unlike a SqlConnection which is opened/closed per call.
+builder.Services.AddSingleton<ProductImageStorage>();
+
 // Phase 3: cookie-based login for the whole app. Every controller is
 // [Authorize] by default except AccountController (Login/Logout), which is
 // [AllowAnonymous] - unauthenticated requests get redirected to LoginPath.

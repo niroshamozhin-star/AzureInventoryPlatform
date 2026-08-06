@@ -5,13 +5,23 @@
 
 <h1>Edit Product</h1>
 
-<form asp-action="Edit" asp-route-id="@Model.Id" class="col-md-6">
+<form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data" class="col-md-6">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImageUrl" />
     <div class="mb-3">
         <label asp-for="ProductCode" class="form-label"></label>
         <input asp-for="ProductCode" class="form-control" />
         <span asp-validation-for="ProductCode" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Product Image</label>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="mb-2"><img src="@Model.ImageUrl" alt="@Model.ProductName" style="max-height: 120px;" class="img-thumbnail" /></div>
+        }
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
+        <div class="form-text">Choose a file to replace the current image, or leave blank to keep it.</div>
     </div>
     <div class="mb-3">
         <label asp-for="ProductName" class="form-label"></label>

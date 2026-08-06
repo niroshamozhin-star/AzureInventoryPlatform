@@ -133,4 +133,4 @@ revokes it again; every page renders its expected seed data once logged in.
 
 ---
 **Previous phase:** [Phase 2 — Azure SQL](phase-02-azure-sql.md)
-**Next phase:** [Phase 4 — Blob Storage](phase-04-blob-storage.md) *(not started yet)*
+**Next phase:** [Phase 4 — Blob Storage](phase-04-blob-storage.md)

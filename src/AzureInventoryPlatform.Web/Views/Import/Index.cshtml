@@ -2,26 +2,52 @@
     ViewData["Title"] = "Import from Excel";
 }
 
-<h1 class="mb-3">Import from Excel</h1>
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <h1 class="mb-0">Import from Excel</h1>
+    <div class="dropdown">
+        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Download Templates
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="https://niroinventorystorage.blob.core.windows.net/templates/Products.xlsx" target="_blank">Products.xlsx</a></li>
+            <li><a class="dropdown-item" href="https://niroinventorystorage.blob.core.windows.net/templates/Warehouses.xlsx" target="_blank">Warehouses.xlsx</a></li>
+            <li><a class="dropdown-item" href="https://niroinventorystorage.blob.core.windows.net/templates/Inventory.xlsx" target="_blank">Inventory.xlsx</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="https://niroinventorystorage.blob.core.windows.net/templates/ProductImages.zip" target="_blank">Sample Product Images (.zip)</a></li>
+        </ul>
+    </div>
+</div>
 <p class="text-muted">
-    Upload the three sample spreadsheets (Products, Warehouses, Inventory) to insert
-    them into Azure SQL via ADO.NET. Inventory rows reference products/warehouses by
-    <code>ProductCode</code>/<code>WarehouseCode</code>, which are matched up in memory
-    during this import and turned into the real database Ids.
+    Upload any combination of the sample spreadsheets (Products, Warehouses, Inventory) to
+    insert them into Azure SQL via ADO.NET — each file is optional, so you can, for example,
+    submit just Products.xlsx to add new products or attach images to existing ones, without
+    re-touching Warehouses or Inventory. A <code>ProductCode</code>/<code>WarehouseCode</code>
+    that already exists is never re-inserted (attaching an image is the only thing that happens
+    to an existing product). Inventory rows reference products/warehouses by
+    <code>ProductCode</code>/<code>WarehouseCode</code>, matched against every product/warehouse
+    already in the database, not just ones from this same import.
 </p>
 
 <form asp-action="Index" method="post" enctype="multipart/form-data" class="col-md-6">
     <div class="mb-3">
         <label class="form-label">Products.xlsx</label>
-        <input type="file" name="productsFile" accept=".xlsx" class="form-control" required />
+        <input type="file" name="productsFile" accept=".xlsx" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Product Images (optional)</label>
+        <input type="file" name="imageFiles" accept="image/*" class="form-control" multiple />
+        <div class="form-text">
+            Matched to a product by the <code>ImageFileName</code> column in Products.xlsx —
+            select every image file referenced there, all at once.
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label">Warehouses.xlsx</label>
-        <input type="file" name="warehousesFile" accept=".xlsx" class="form-control" required />
+        <input type="file" name="warehousesFile" accept=".xlsx" class="form-control" />
     </div>
     <div class="mb-3">
         <label class="form-label">Inventory.xlsx</label>
-        <input type="file" name="inventoryFile" accept=".xlsx" class="form-control" required />
+        <input type="file" name="inventoryFile" accept=".xlsx" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Import</button>
 </form>
