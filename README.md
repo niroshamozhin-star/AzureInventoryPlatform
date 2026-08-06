@@ -1,5 +1,9 @@
 # Azure Inventory Management & Reporting Platform
 
+Azure cloud URL : https://niro-inventory-webapp-brbsh8cqcdbwegdw.centralindia-01.azurewebsites.net/Account/Login
+User name : admin
+Password : Learn-Az204!
+
 > This repository is a learning portfolio.
 
 An ASP.NET Core 8 MVC application for tracking products, warehouses, and stock
@@ -37,7 +41,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Service | Status | Purpose |
 |---|---|---|
 | Azure App Service | ✅ Phase 1 | Hosts the MVC app (Windows, S1 Standard tier) |
-| Azure SQL | ✅ Phase 2 | Import excel from application to Azure SQL DB |
+| Azure SQL | ✅ Phase 2 | Import excel from application through ADO .Net to Azure SQL DB |
 | Authentication | ✅ Phase 3 | Cookie-based login secures every page in the app |
 | Blob Storage | ✅ Phase 4 | Product image uploads, served via a public blob container |
 | Azure Functions | ✅ Phase 5 | Standalone HTTP-triggered API (isolated worker), JWT-secured |
