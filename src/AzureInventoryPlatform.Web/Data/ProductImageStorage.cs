@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
@@ -12,12 +13,25 @@ public class ProductImageStorage
 
     public ProductImageStorage(IConfiguration configuration)
     {
-        var connectionString = configuration["Storage:ConnectionString"]
-            ?? throw new InvalidOperationException("Missing Storage:ConnectionString configuration.");
         var containerName = configuration["Storage:ContainerName"]
             ?? throw new InvalidOperationException("Missing Storage:ContainerName configuration.");
 
-        _container = new BlobContainerClient(connectionString, containerName);
+        // Phase 9: if an account name is configured, connect with the Web App's
+        // own managed identity instead of an account key - there is no secret
+        // to leak here at all. Falls back to a connection string (e.g. local
+        // dev against Azurite) when Storage:AccountName isn't set.
+        var accountName = configuration["Storage:AccountName"];
+        if (!string.IsNullOrWhiteSpace(accountName))
+        {
+            var containerUri = new Uri($"https://{accountName}.blob.core.windows.net/{containerName}");
+            _container = new BlobContainerClient(containerUri, new DefaultAzureCredential());
+        }
+        else
+        {
+            var connectionString = configuration["Storage:ConnectionString"]
+                ?? throw new InvalidOperationException("Missing Storage:ConnectionString or Storage:AccountName configuration.");
+            _container = new BlobContainerClient(connectionString, containerName);
+        }
     }
 
     public async Task<string> UploadAsync(IFormFile file)

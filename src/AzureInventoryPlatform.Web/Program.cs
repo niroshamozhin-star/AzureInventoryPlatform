@@ -1,8 +1,20 @@
+using Azure.Identity;
 using AzureInventoryPlatform.Web;
 using AzureInventoryPlatform.Web.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Phase 8/9: Key Vault + Managed Identity. If KeyVault:Uri is set (only on
+// Azure - locally this stays blank and config falls back to User Secrets),
+// pull secrets from Key Vault using the Web App's own system-assigned
+// managed identity. No client secret or key is ever stored anywhere - Azure
+// AD handles the authentication behind DefaultAzureCredential.
+var keyVaultUri = builder.Configuration["KeyVault:Uri"];
+if (!string.IsNullOrWhiteSpace(keyVaultUri))
+{
+    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
+}
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHealthChecks();

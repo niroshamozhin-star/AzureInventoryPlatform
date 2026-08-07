@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Azure.Core 1.55+ (required by Azure.Storage.Blobs 12.29.1) now bundles
+         its own Azure.Identity.DefaultAzureCredential, which collides at
+         compile time with the real Azure.Identity package Microsoft.Data.SqlClient
+         pulls in transitively. ExcludeAssets="compile" keeps that real package
+         for runtime (SqlClient still needs it) but hides it from the C#
+         compiler, so Azure.Core's copy is the only one our own code sees. -->
+    <PackageReference Include="Azure.Identity" Version="1.13.1" ExcludeAssets="compile" />
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.29.1" />
     <PackageReference Include="ClosedXML" Version="0.105.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
