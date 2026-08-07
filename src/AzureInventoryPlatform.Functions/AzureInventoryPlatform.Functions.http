@@ -7,11 +7,11 @@ Content-Type: application/json
 {
   "username": "admin",
   "password": "Learn-Az204!"
-}sorry at #2
+}
 
 ### 2. Call the low-stock report (HTTP trigger: GetLowStockReport)
-# Paste the "token" value from request #1's response into {{token}} below before sending.
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJleHAiOjE3ODU5OTg4NjIsImlzcyI6IkF6dXJlSW52ZW50b3J5UGxhdGZvcm0uRnVuY3Rpb25zIiwiYXVkIjoiQXp1cmVJbnZlbnRvcnlQbGF0Zm9ybS5GdW5jdGlvbnMifQ.zCbHn_iM1ZYlvA0lrS6Mu203Auymf6abBQP5LfCTIMw
+# Paste the "token" value from request #1's response into @token below before sending (no quotes around it).
+@token = PASTE_TOKEN_HERE
 
 GET {{HostAddress}}/api/reports/low-stock
 Authorization: Bearer {{token}}
@@ -22,6 +22,43 @@ GET {{HostAddress}}/api/reports/low-stock
 ### 4. Manually fire the Timer trigger right now (LowStockTimerCheck)
 # Result appears in the Output window, not here - this request will just return 202/200.
 POST {{HostAddress}}/admin/functions/LowStockTimerCheck
+Content-Type: application/json
+
+{
+  "input": ""
+}
+
+################################################################################
+## Same four requests, against the live Azure Function App.
+## The Portal's own Test/Run panel blocks a custom Authorization header, so use
+## these instead - Visual Studio's "Send Request" link has no such restriction.
+################################################################################
+
+@LiveHostAddress = https://niro-inventory-functions-dsbebyfch0g2c3gj.centralindia-01.azurewebsites.net
+
+### 5. Get a JWT token (live)
+POST {{LiveHostAddress}}/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Learn-Az204!"
+}
+
+### 6. Call the low-stock report (live)
+@liveToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJleHAiOjE3ODYwODg1OTAsImlzcyI6IkF6dXJlSW52ZW50b3J5UGxhdGZvcm0uRnVuY3Rpb25zIiwiYXVkIjoiQXp1cmVJbnZlbnRvcnlQbGF0Zm9ybS5GdW5jdGlvbnMifQ.XpPKv-l9eTw21ERYY1GP75xTcebPWFOUN3RdZRTEJaE
+
+GET {{LiveHostAddress}}/api/reports/low-stock
+Authorization: Bearer {{liveToken}}
+
+### 7. Negative test - should return 401 (live, no Authorization header)
+GET {{LiveHostAddress}}/api/reports/low-stock
+
+### 8. Manually fire the Timer trigger right now (live)
+# The admin endpoint requires the function's master key on a real Function App
+# (unlike local dev, which allows it anonymously). Get the key from:
+# niro-inventory-functions -> App keys -> _master, and paste it below.
+POST {{LiveHostAddress}}/admin/functions/LowStockTimerCheck?code=PASTE_MASTER_KEY_HERE
 Content-Type: application/json
 
 {

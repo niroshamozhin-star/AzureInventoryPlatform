@@ -6,6 +6,7 @@
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>9397f591-eb6b-41af-95fc-4d9c0c8bcad5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,11 +35,7 @@
       <_SystemMemoryDataSource>$(NuGetPackageRoot)system.memory.data\8.0.1\lib\net8.0\System.Memory.Data.dll</_SystemMemoryDataSource>
       <_AzureFunctionsExtensionsDir>$(OutDir).azurefunctions\</_AzureFunctionsExtensionsDir>
     </PropertyGroup>
-    <Copy
-      SourceFiles="$(_SystemMemoryDataSource)"
-      DestinationFolder="$(_AzureFunctionsExtensionsDir)"
-      SkipUnchangedFiles="true"
-      Condition="Exists('$(_SystemMemoryDataSource)') AND Exists('$(_AzureFunctionsExtensionsDir)')" />
+    <Copy SourceFiles="$(_SystemMemoryDataSource)" DestinationFolder="$(_AzureFunctionsExtensionsDir)" SkipUnchangedFiles="true" Condition="Exists('$(_SystemMemoryDataSource)') AND Exists('$(_AzureFunctionsExtensionsDir)')" />
   </Target>
 
 </Project>

@@ -140,7 +140,29 @@ Three genuine "found it by running it" bugs came out of this phase:
    constructor the extension package expected. **Fix:** updated Core Tools
    via Visual Studio's Tools -> Options -> Azure Functions.
 
-## 6. Testing
+## 6. Config issues hit while testing this live on Azure
+
+- Web app crashed with a `500.30` error after sitting idle for a while.
+  Republishing from Visual Studio fixed it.
+- Web app's `Storage:ConnectionString` setting was blank, not missing, so
+  the app's own check didn't catch it. Added `Storage__ConnectionString`
+  and `Storage__ContainerName` as app settings.
+- Blob trigger wasn't firing because the function app's `AzureWebJobsStorage`
+  setting didn't exist at all. Host showed unhealthy until it was added.
+- Mixed up `AzureWebJobsStorageType` (where function keys are stored) with
+  `AzureWebJobsStorage` (the actual storage connection) - similar names,
+  different settings.
+- Function list in the Portal was empty until the app was restarted after
+  adding `AzureWebJobsStorage`.
+- Portal's Test/Run panel won't let you set an `Authorization` header, so
+  switched to the `.http` file in Visual Studio for testing the live app.
+- Pasted a JWT token into the `.http` file and it got split across a few
+  lines, which broke it. Had to put it back on one line.
+- The `/admin/functions/{name}` endpoint needs the master key on the live
+  app - locally it just works without one.
+- JWT tokens expire in an hour, so had to grab a fresh one before retesting.
+
+## 7. Testing
 
 **Locally**, two things need to be running side by side:
 1. **Azurite** (local Azure Storage emulator) - the Functions host checks
