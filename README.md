@@ -47,8 +47,8 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Azure Functions | ✅ Phase 5 | HTTP, Timer, and Blob triggers (isolated worker), JWT-secured API + scheduled + reactive jobs |
 | Service Bus | ⬜ Phase 6 | Async inventory-changed events |
 | Cosmos DB | ⬜ Phase 7 | Denormalized store for the Reports module |
-| Key Vault | ⬜ Phase 8 | Secrets/connection strings out of config files |
-| Managed Identity | ⬜ Phase 9 | Passwordless auth from App Service to the above |
+| Key Vault | ✅ Phase 8 | Secrets/connection strings out of config files |
+| Managed Identity | ✅ Phase 9 | Passwordless auth from App Service to the above |
 | Application Insights | ⬜ Phase 10 | Telemetry, custom events/metrics |
 | Azure Monitor | ⬜ Phase 11 | Alert rules and dashboards |
 | Docker | ⬜ Phase 12 | Containerize the app |
@@ -107,8 +107,8 @@ feature of the app rather than an isolated demo:
 | 5 | Azure Functions (HTTP, Timer, Blob) | ✅ Done | [docs/learning-notes/phase-05-azure-functions.md](docs/learning-notes/phase-05-azure-functions.md) |
 | 6 | Service Bus | ⬜ Not started | |
 | 7 | Cosmos DB | ⬜ Not started | |
-| 8 | Key Vault | ⬜ Not started | |
-| 9 | Managed Identity | ⬜ Not started | |
+| 8 | Key Vault | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |
+| 9 | Managed Identity | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |
 | 10 | Application Insights | ⬜ Not started | |
 | 11 | Azure Monitor | ⬜ Not started | |
 | 12 | Docker | ⬜ Not started | |
@@ -166,9 +166,10 @@ No secrets, connection strings, or credentials are committed to this repository.
 Visual Studio publish profiles (`*.pubxml`, `Properties/ServiceDependencies/`),
 and common secret file patterns. The Azure SQL connection string is sourced from
 [User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets)
-locally and an App Service Connection String setting in Azure — `appsettings.json`
-only ever holds an empty placeholder. Later phases move this to
-**Managed Identity** (Phase 9), removing the password entirely.
+locally; in Azure it's now stored as a secret in **Key Vault** and read via
+the Web App's own **Managed Identity** (Phase 8/9) — no password or key
+sits in App Service configuration at all. `appsettings.json` only ever
+holds an empty placeholder.
 
 ## Cost philosophy
 
