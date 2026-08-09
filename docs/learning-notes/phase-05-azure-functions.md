@@ -206,4 +206,4 @@ successfully with no code change, not a bug.
 
 ---
 **Previous phase:** [Phase 4 — Blob Storage](phase-04-blob-storage.md)
-**Next phase:** Phase 6 — Service Bus *(not started yet)*
+**Next phase:** [Phase 8 & 9 — Key Vault and Managed Identity](phase-08-09-key-vault-managed-identity.md) *(built out of order, before Phase 6/7)*

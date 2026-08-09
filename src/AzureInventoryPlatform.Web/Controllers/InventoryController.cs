@@ -13,12 +13,21 @@ public class InventoryController : Controller
     private readonly InventoryData _inventory;
     private readonly ProductData _products;
     private readonly WarehouseData _warehouses;
+    private readonly InventoryEventPublisher _events;
+    private readonly ILogger<InventoryController> _logger;
 
-    public InventoryController(InventoryData inventory, ProductData products, WarehouseData warehouses)
+    public InventoryController(
+        InventoryData inventory,
+        ProductData products,
+        WarehouseData warehouses,
+        InventoryEventPublisher events,
+        ILogger<InventoryController> logger)
     {
         _inventory = inventory;
         _products = products;
         _warehouses = warehouses;
+        _events = events;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -115,6 +124,17 @@ public class InventoryController : Controller
             item.Quantity = newQuantity;
             await _inventory.UpdateAsync(item);
             TempData["Success"] = "Quantity adjusted.";
+
+            // Service Bus is a side channel, not part of the core update - a
+            // queue outage shouldn't stop the user from adjusting inventory.
+            try
+            {
+                await _events.PublishQuantityChangedAsync(item.Id, item.ProductId, item.WarehouseId, delta, item.Quantity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to publish inventory-changed event for InventoryId={InventoryId}", item.Id);
+            }
         }
 
         return RedirectToAction(nameof(Index));

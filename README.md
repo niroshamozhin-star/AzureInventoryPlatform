@@ -45,7 +45,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Authentication | ✅ Phase 3 | Cookie-based login secures every page in the app |
 | Blob Storage | ✅ Phase 4 | Product image uploads, served via a public blob container |
 | Azure Functions | ✅ Phase 5 | HTTP, Timer, and Blob triggers (isolated worker), JWT-secured API + scheduled + reactive jobs |
-| Service Bus | ⬜ Phase 6 | Async inventory-changed events |
+| Service Bus | ✅ Phase 6 | Async inventory-changed events |
 | Cosmos DB | ⬜ Phase 7 | Denormalized store for the Reports module |
 | Key Vault | ✅ Phase 8 | Secrets/connection strings out of config files |
 | Managed Identity | ✅ Phase 9 | Passwordless auth from App Service to the above |
@@ -105,7 +105,7 @@ feature of the app rather than an isolated demo:
 | 3 | Authentication | ✅ Done | [docs/learning-notes/phase-03-authentication.md](docs/learning-notes/phase-03-authentication.md) |
 | 4 | Blob Storage | ✅ Done | [docs/learning-notes/phase-04-blob-storage.md](docs/learning-notes/phase-04-blob-storage.md) |
 | 5 | Azure Functions (HTTP, Timer, Blob) | ✅ Done | [docs/learning-notes/phase-05-azure-functions.md](docs/learning-notes/phase-05-azure-functions.md) |
-| 6 | Service Bus | ⬜ Not started | |
+| 6 | Service Bus | ✅ Done | [docs/learning-notes/phase-06-service-bus.md](docs/learning-notes/phase-06-service-bus.md) |
 | 7 | Cosmos DB | ⬜ Not started | |
 | 8 | Key Vault | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |
 | 9 | Managed Identity | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |

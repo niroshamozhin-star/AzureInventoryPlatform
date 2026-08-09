@@ -16,6 +16,7 @@
          compiler, so Azure.Core's copy is the only one our own code sees. -->
     <PackageReference Include="Azure.Identity" Version="1.13.1" ExcludeAssets="compile" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.29.1" />
     <PackageReference Include="ClosedXML" Version="0.105.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />

@@ -145,4 +145,4 @@ happened to block the build for everyone, including this phase's testing:
 
 ---
 **Previous phase:** [Phase 5 — Azure Functions](phase-05-azure-functions.md) *(Phases 6-7 drafted but not deployed/tested yet)*
-**Next phase:** Phase 10 — Application Insights *(not started yet)*
+**Next phase:** [Phase 6 — Service Bus](phase-06-service-bus.md)
