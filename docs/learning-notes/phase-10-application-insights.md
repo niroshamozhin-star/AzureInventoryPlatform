@@ -130,4 +130,4 @@ rather than one resource each. Backed by a Log Analytics workspace
 
 ---
 **Previous phase:** [Phase 7 — Cosmos DB](phase-07-cosmos-db.md)
-**Next phase:** Phase 11 — Azure Monitor *(not started yet)*
+**Next phase:** [Phase 11 — Azure Monitor](phase-11-azure-monitor.md)
