@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/.vs/
+.git/
+.github/
+docs/
+*.md
+tests/
+src/AzureInventoryPlatform.Functions/
