@@ -49,7 +49,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Cosmos DB | ✅ Phase 7 | Denormalized store for the Reports module |
 | Key Vault | ✅ Phase 8 | Secrets/connection strings out of config files |
 | Managed Identity | ✅ Phase 9 | Passwordless auth from App Service to the above |
-| Application Insights | ⬜ Phase 10 | Telemetry, custom events/metrics |
+| Application Insights | ✅ Phase 10 | Telemetry, custom events/metrics |
 | Azure Monitor | ⬜ Phase 11 | Alert rules and dashboards |
 | Docker | ⬜ Phase 12 | Containerize the app |
 | Azure Container Registry | ⬜ Phase 13 | Host the container image |
@@ -109,7 +109,7 @@ feature of the app rather than an isolated demo:
 | 7 | Cosmos DB | ✅ Done | [docs/learning-notes/phase-07-cosmos-db.md](docs/learning-notes/phase-07-cosmos-db.md) |
 | 8 | Key Vault | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |
 | 9 | Managed Identity | ✅ Done | [docs/learning-notes/phase-08-09-key-vault-managed-identity.md](docs/learning-notes/phase-08-09-key-vault-managed-identity.md) |
-| 10 | Application Insights | ⬜ Not started | |
+| 10 | Application Insights | ✅ Done | [docs/learning-notes/phase-10-application-insights.md](docs/learning-notes/phase-10-application-insights.md) |
 | 11 | Azure Monitor | ⬜ Not started | |
 | 12 | Docker | ⬜ Not started | |
 | 13 | Azure Container Registry | ⬜ Not started | |

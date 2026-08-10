@@ -119,4 +119,4 @@ that would cost more setup time than it teaches for a learning project.
 
 ---
 **Previous phase:** [Phase 6 — Service Bus](phase-06-service-bus.md)
-**Next phase:** Phase 10 — Application Insights *(not started yet)*
+**Next phase:** [Phase 10 — Application Insights](phase-10-application-insights.md)

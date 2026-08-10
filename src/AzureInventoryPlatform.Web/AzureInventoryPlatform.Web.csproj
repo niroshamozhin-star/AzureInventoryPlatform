@@ -19,6 +19,7 @@
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.29.1" />
     <PackageReference Include="ClosedXML" Version="0.105.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.46.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <!-- Microsoft.Azure.Cosmos uses Newtonsoft.Json internally and fails the

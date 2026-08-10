@@ -19,6 +19,11 @@ if (!string.IsNullOrWhiteSpace(keyVaultUri))
 builder.Services.AddControllersWithViews();
 builder.Services.AddHealthChecks();
 
+// Phase 10: Application Insights. Reads ApplicationInsights:ConnectionString
+// (App Service surfaces its own linked resource as this same config key
+// automatically) - if it's not set, telemetry is just never sent, no error.
+builder.Services.AddApplicationInsightsTelemetry();
+
 // Phase 2: direct ADO.NET access to Azure SQL, no repository abstraction.
 builder.Services.AddScoped<ProductData>();
 builder.Services.AddScoped<WarehouseData>();

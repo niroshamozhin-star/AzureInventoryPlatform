@@ -1,5 +1,6 @@
 using AzureInventoryPlatform.Web.Data;
 using AzureInventoryPlatform.Web.Models;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ public class ProductsController : Controller
 {
     private readonly ProductData _products;
     private readonly ProductImageStorage _images;
+    private readonly TelemetryClient _telemetry;
 
-    public ProductsController(ProductData products, ProductImageStorage images)
+    public ProductsController(ProductData products, ProductImageStorage images, TelemetryClient telemetry)
     {
         _products = products;
         _images = images;
+        _telemetry = telemetry;
     }
 
     public async Task<IActionResult> Index() => View(await _products.GetAllAsync());
@@ -36,6 +39,17 @@ public class ProductsController : Controller
         }
 
         await _products.AddAsync(product);
+
+        // Phase 10: a custom event on top of the automatic request/dependency
+        // tracking AddApplicationInsightsTelemetry() already gives every
+        // action for free - this one is deliberate business telemetry, not
+        // just "a request happened".
+        _telemetry.TrackEvent("ProductCreated", new Dictionary<string, string>
+        {
+            ["ProductCode"] = product.ProductCode,
+            ["HasImage"] = (imageFile is { Length: > 0 }).ToString(),
+        });
+
         TempData["Success"] = $"Product \"{product.ProductName}\" created.";
         return RedirectToAction(nameof(Index));
     }
