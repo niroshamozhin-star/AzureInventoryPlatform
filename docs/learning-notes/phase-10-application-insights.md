@@ -21,21 +21,45 @@ split across two dashboards.
 
 ## 2. Flow
 
+The two apps don't call each other directly for telemetry - each one
+independently sends its own data to the same connection string. The code
+on each side is a mirror image of the other:
+
 ```
-Automatic instrumentation (no code beyond one registration call):
-  every HTTP request, every outgoing SQL/Blob/Cosmos call, every
-  exception -> captured and sent to Application Insights automatically,
-  correlated under one "Operation ID" per request.
+WEB APP                                          FUNCTION APP
+────────                                         ────────────
+Program.cs                                        Program.cs
+  builder.Services                                  builder.ConfigureFunctionsWebApplication()
+    .AddApplicationInsightsTelemetry()                .Services
+         |                                              .AddApplicationInsightsTelemetryWorkerService()
+         | reads config key                             .ConfigureFunctionsApplicationInsights()
+         v                                                     |
+  APPLICATIONINSIGHTS_CONNECTION_STRING            reads config key
+  (app setting on Web App)                                     v
+         |                                          APPLICATIONINSIGHTS_CONNECTION_STRING
+         |                                          (app setting on Function App)
+         |                                                     |
+         |         SAME connection string value on both  <-----+
+         |
+         v                                                     v
+  Every controller action auto-tracked:            Every function invocation auto-tracked:
+  - HTTP request                                    - Trigger firing
+  - SQL/Blob/Cosmos calls                            - SQL/Blob/Cosmos calls
+  - Exceptions                                       - Exceptions
+  PLUS deliberate:
+  _telemetry.TrackEvent("ProductCreated", ...)
+  in ProductsController.Create()
+         |                                                     |
+         +----------------------+------------------------------+
+                                v
+              Application Insights resource
+              "niro-inventory-functions" (ONE resource, shared)
 
-Deliberate custom telemetry (Phase 10's own code):
-  ProductsController.Create() succeeds
-      -> _telemetry.TrackEvent("ProductCreated", { ProductCode, HasImage })
-      -> shows up as its own event, nested inside that same request's
-         end-to-end transaction trace alongside the automatic entries.
-
-Both apps -> same Application Insights resource (niro-inventory-functions)
-      -> Live Metrics shows "2 servers online"
-      -> Transaction search / Logs shows traffic from both, correlated.
+              Live Metrics -> "2 servers online"
+              Transaction search -> both apps' requests, correlated
+              by Operation ID whenever they're part of the same
+              real request chain (e.g. a Service Bus message
+              published by the Web App and consumed by the Function).
 ```
 
 ## 3. Azure resource
