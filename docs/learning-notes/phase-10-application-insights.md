@@ -13,15 +13,10 @@ timestamped record automatically - plus a place to add deliberate
 business telemetry ("a product was created") on top of that automatic
 layer.
 
-**A wrinkle worth naming:** the Function App already had an Application
-Insights *resource* (`niro-inventory-functions`) from when it was first
-created - but the isolated-worker code was never actually wired to send
-telemetry to it. Having the resource and the connection string setting
-present isn't enough on its own for the isolated worker model; it needs
-an explicit registration call. This phase fixes that gap and also
-connects the Web App to the **same** resource, rather than creating a
-second one - the standard real-world pattern for a multi-component app,
-so requests across both apps show up correlated in one place instead of
+Both the Web App and the Function App send their telemetry to the same
+Application Insights resource (`niro-inventory-functions`), rather than
+one each - the standard real-world pattern for a multi-component app, so
+requests across both apps show up correlated in one place instead of
 split across two dashboards.
 
 ## 2. Flow
@@ -45,10 +40,9 @@ Both apps -> same Application Insights resource (niro-inventory-functions)
 
 ## 3. Azure resource
 
-**Application Insights** `niro-inventory-functions` - already existed
-(auto-created alongside the Function App), reused rather than duplicated
-for the Web App. Backed by a Log Analytics workspace
-(`DefaultWorkspace-...-CID`, also auto-created).
+**Application Insights** `niro-inventory-functions`, shared by both apps
+rather than one resource each. Backed by a Log Analytics workspace
+(`DefaultWorkspace-...-CID`).
 
 ## 4. Code
 
@@ -60,9 +54,9 @@ for the Web App. Backed by a Log Analytics workspace
       .AddApplicationInsightsTelemetryWorkerService()
       .ConfigureFunctionsApplicationInsights();
   ```
-  This is the actual fix for the "resource exists but nothing's being
-  sent" gap - the isolated worker model needs this explicit call; the
-  older in-process model didn't.
+  This is what makes the isolated worker model actually send telemetry -
+  it reads the connection string from config and starts forwarding every
+  function invocation, dependency call, and exception automatically.
 - **Web project** - added `Microsoft.ApplicationInsights.AspNetCore`. In
   `Program.cs`: `builder.Services.AddApplicationInsightsTelemetry();` -
   one line, reads the connection string from config automatically, gives
@@ -83,13 +77,12 @@ for the Web App. Backed by a Log Analytics workspace
 
 ## 5. Azure Portal configuration
 
-1. Copied the **Connection String** from the existing
-   `niro-inventory-functions` Application Insights resource.
+1. Copied the **Connection String** from the `niro-inventory-functions`
+   Application Insights resource.
 2. Web App → Configuration → Application settings → added
    `APPLICATIONINSIGHTS_CONNECTION_STRING` with that value.
-3. Confirmed the Function App already had the same setting (it did, from
-   creation-time auto-provisioning) - just needed the code fix above to
-   actually use it.
+3. Function App → Configuration → confirmed the same setting is present
+   there too, pointing at the same connection string.
 4. Published both projects.
 
 ## 6. Testing
