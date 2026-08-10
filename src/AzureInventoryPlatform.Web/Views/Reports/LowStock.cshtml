@@ -5,6 +5,18 @@
 
 <h1 class="mb-4">Low Stock Report</h1>
 
+@{
+    var cosmosSnapshot = ViewBag.CosmosSnapshot as AzureInventoryPlatform.Web.Data.LowStockSnapshot;
+}
+@if (cosmosSnapshot is not null)
+{
+    <p class="text-muted small">
+        Cached snapshot (Cosmos DB): <strong>@cosmosSnapshot.LowStockCount.ToString("N0")</strong> item(s) as of
+        the Functions app's last scheduled check (@cosmosSnapshot.CheckedAtUtc.ToString("u")). The table below is
+        always the live count straight from Azure SQL - this is just proof the cached copy is real and current.
+    </p>
+}
+
 <table class="table table-striped align-middle">
     <thead>
         <tr>

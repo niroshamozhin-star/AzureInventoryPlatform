@@ -32,6 +32,9 @@ builder.Services.AddSingleton<ProductImageStorage>();
 // Phase 6: Service Bus - publishes an event whenever inventory is adjusted.
 builder.Services.AddSingleton<InventoryEventPublisher>();
 
+// Phase 7: Cosmos DB - reads the low-stock snapshot the Functions app writes.
+builder.Services.AddSingleton<LowStockSnapshotStore>();
+
 // Phase 3: cookie-based login for the whole app. Every controller is
 // [Authorize] by default except AccountController (Login/Logout), which is
 // [AllowAnonymous] - unauthenticated requests get redirected to LoginPath.

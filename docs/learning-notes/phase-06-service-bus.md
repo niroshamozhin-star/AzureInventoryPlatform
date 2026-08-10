@@ -92,4 +92,4 @@ request already finished and returned before the Function even ran.
 
 ---
 **Previous phase:** [Phase 8 & 9 — Key Vault and Managed Identity](phase-08-09-key-vault-managed-identity.md)
-**Next phase:** Phase 7 — Cosmos DB *(drafted, not yet deployed/tested)*
+**Next phase:** [Phase 7 — Cosmos DB](phase-07-cosmos-db.md)

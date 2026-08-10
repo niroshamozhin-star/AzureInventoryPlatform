@@ -144,5 +144,5 @@ happened to block the build for everyone, including this phase's testing:
   correctly off that upload.
 
 ---
-**Previous phase:** [Phase 5 — Azure Functions](phase-05-azure-functions.md) *(Phases 6-7 drafted but not deployed/tested yet)*
+**Previous phase:** [Phase 5 — Azure Functions](phase-05-azure-functions.md) *(built out of order, before Phases 6-7)*
 **Next phase:** [Phase 6 — Service Bus](phase-06-service-bus.md)

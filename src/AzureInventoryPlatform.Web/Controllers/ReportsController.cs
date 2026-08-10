@@ -11,12 +11,14 @@ public class ReportsController : Controller
     private readonly InventoryData _inventory;
     private readonly ProductData _products;
     private readonly WarehouseData _warehouses;
+    private readonly LowStockSnapshotStore _snapshots;
 
-    public ReportsController(InventoryData inventory, ProductData products, WarehouseData warehouses)
+    public ReportsController(InventoryData inventory, ProductData products, WarehouseData warehouses, LowStockSnapshotStore snapshots)
     {
         _inventory = inventory;
         _products = products;
         _warehouses = warehouses;
+        _snapshots = snapshots;
     }
 
     public IActionResult Index() => RedirectToAction(nameof(InventoryByWarehouse));
@@ -56,6 +58,11 @@ public class ReportsController : Controller
                 products[i.ProductId].ReorderLevel))
             .OrderBy(a => a.Quantity)
             .ToList();
+
+        // Phase 7: shows the cached snapshot the Functions app's timer trigger
+        // last wrote to Cosmos DB, alongside the live SQL numbers above - not
+        // a replacement for them, just a visible proof the cache is real.
+        ViewBag.CosmosSnapshot = await _snapshots.GetLatestAsync();
 
         return View(lowStock);
     }
