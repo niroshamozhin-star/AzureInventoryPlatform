@@ -1,0 +1,36 @@
+name: Deploy Web app to App Service
+
+# Phase 14: automates what Visual Studio's manual Publish has done for
+# every phase up to now. Manual trigger only, on purpose - a bad commit
+# going live automatically with no gate is a real risk this project
+# isn't ready to accept yet. Deploys the .NET code directly (same as
+# Publish always has) - does NOT touch the Docker image from Phase 12/13
+# or switch the App Service off Code deployment.
+on:
+  workflow_dispatch: {}
+
+env:
+  AZURE_WEBAPP_NAME: niro-inventory-webapp
+  PROJECT_PATH: src/AzureInventoryPlatform.Web/AzureInventoryPlatform.Web.csproj
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ${{ github.workspace }}/publish
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ github.workspace }}/publish
