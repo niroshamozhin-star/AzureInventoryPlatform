@@ -53,7 +53,7 @@ Actions CI/CD — one phase, one Azure service, at a time. See
 | Azure Monitor | ✅ Phase 11 | Alert rules and dashboards |
 | Docker | ✅ Phase 12 | Containerize the Web app |
 | Azure Container Registry | ✅ Phase 13 | Host the container image |
-| GitHub Actions | ⬜ Phase 14 | CI/CD straight from this repo |
+| GitHub Actions | ✅ Phase 14 | CI/CD straight from this repo |
 
 ## Architecture Diagram
 
@@ -113,7 +113,7 @@ feature of the app rather than an isolated demo:
 | 11 | Azure Monitor | ✅ Done | [docs/learning-notes/phase-11-azure-monitor.md](docs/learning-notes/phase-11-azure-monitor.md) |
 | 12 | Docker | ✅ Done | [docs/learning-notes/phase-12-13-docker-acr.md](docs/learning-notes/phase-12-13-docker-acr.md) |
 | 13 | Azure Container Registry | ✅ Done | [docs/learning-notes/phase-12-13-docker-acr.md](docs/learning-notes/phase-12-13-docker-acr.md) |
-| 14 | CI/CD (GitHub Actions) | ⬜ Not started | |
+| 14 | CI/CD (GitHub Actions) | ✅ Done | [docs/learning-notes/phase-14-github-actions-cicd.md](docs/learning-notes/phase-14-github-actions-cicd.md) |
 
 Each phase gets its own write-up in `docs/learning-notes/` covering: business scenario, the
 Azure resource created, the code change, Azure Portal configuration steps,
