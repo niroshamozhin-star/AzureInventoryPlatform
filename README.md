@@ -1,8 +1,8 @@
 # Azure Inventory Management & Reporting Platform
 
-Azure cloud URL : https://niro-inventory-webapp-brbsh8cqcdbwegdw.centralindia-01.azurewebsites.net/Account/Login
-User name : admin
-Password : Learn-Az204!
+Live demo: https://niro-inventory-webapp-brbsh8cqcdbwegdw.centralindia-01.azurewebsites.net/Account/Login
+
+Demo credentials available on request.
 
 > This repository is a learning portfolio.
 
